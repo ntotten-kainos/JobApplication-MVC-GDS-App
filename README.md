@@ -33,11 +33,9 @@ This guide will walk you through setting up an ASP.NET MVC app with GDS precompi
 4. As Type select ‘xUnit’ in the dropdown
 5. Make sure that the Target Framework is net8.0
 6. Give your test project a name
-7. Make sure that it is being created in the correct project directory
-8. Once is is created, go to the Web App Project directory and find the Test folder than was created in it
-9. Right click the folder and select ‘Exclude’
-10. Build and run the Web App to make sure it is working
-11. Then run your tests by right clicking on it and selecting run tests
+7. Make sure that it is being created in the correct project directory 
+8. Build and run the Web App to make sure it is working 
+9. Then run your tests by right clicking on them in the solution explorer and selecting run tests
 
 ## Step 4: Add GDS precompiled assets to your project
 
