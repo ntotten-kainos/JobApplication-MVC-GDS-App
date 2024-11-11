@@ -26,7 +26,20 @@ This guide will walk you through setting up an ASP.NET MVC app with GDS precompi
 3. Commit your changes with `git commit -m "Initial project setup"`.
 4. Push your changes to the remote repository with `git push`.
 
-## Step 3: Add GDS precompiled assets to your project
+## Step 3: Add xUnit Project to solution
+1. Right click the solution folder at the top of the solution explorer
+2. Click ‘Add’, then ‘New Project’
+3. Then click ‘Unit Test’ as Project Type
+4. As Type select ‘xUnit’ in the dropdown
+5. Make sure that the Target Framework is net8.0
+6. Give your test project a name
+7. Make sure that it is being created in the correct project directory
+8. Once is is created, go to the Web App Project directory and find the Test folder than was created in it
+9. Right click the folder and select ‘Exclude’
+10. Build and run the Web App to make sure it is working
+11. Then run your tests by right clicking on it and selecting run tests
+
+## Step 4: Add GDS precompiled assets to your project
 
 For a full tutorial, see the GOV.UK Guide on using GDS precompiled assets [here](https://frontend.design-system.service.gov.uk/install-using-precompiled-files/#try-gov-uk-frontend-using-precompiled-files).  
 Note: This will require some tinkering to adapt it to the structure of a .NET Core project. Mainly in the way the assets are referenced in the `_Layout.cshtml` file and how you add assets to `wwwroot`.
@@ -40,7 +53,7 @@ Note: This will require some tinkering to adapt it to the structure of a .NET Co
 4. Create a folder under `wwwroot` called `javascripts`.  
    Copy the `govuk-frontend-5.7.1.min.js` and `govuk-frontend-5.7.1.min.js.map` files from the extracted zip and paste these into the `javascripts` folder.
 
-## Step 4: Update your layout file to include GDS assets
+## Step 5: Update your layout file to include GDS assets
 
 1. Under `Views > Shared` in your project, open the `_Layout.cshtml` file.
 2. In the `<head></head>` section of the file, add the following code:   
@@ -63,14 +76,14 @@ Note: This will require some tinkering to adapt it to the structure of a .NET Co
    
 Your project now has access to the Government Design System Precompiled Assets via the `_Layout.cshtml` file.
 
-## Step 5: Commit changes to repo
+## Step 6: Commit changes to repo
 
 1. Stage your changes with `git add *`.
 2. Commit your changes with `git commit -m "Added GDS precompiled assets to project"`.
 3. Push your changes to the remote repository with `git push`.
 4. Create a pull request to merge your changes into the main branch if necessary.
 
-## Step 6: Working with GDS Components
+## Step 7: Working with GDS Components
 
 1. See the following page for info on working with GDS components.  
    Note: You will have to copy and paste the HTML examples as nunjucks is not compatible/configured here.
