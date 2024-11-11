@@ -287,5 +287,3 @@
 /Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/obj/Debug/net8.0/JobApplicationMVCApp.pdb
 /Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/obj/Debug/net8.0/JobApplicationMVCApp.genruntimeconfig.cache
 /Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/obj/Debug/net8.0/ref/JobApplicationMVCApp.dll
-/Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/bin/Debug/net8.0/package-lock.json
-/Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/bin/Debug/net8.0/package.json
