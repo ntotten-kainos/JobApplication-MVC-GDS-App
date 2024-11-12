@@ -482,3 +482,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# intermediate files and build artifacts that are generated during the build process.
+/obj/
+
