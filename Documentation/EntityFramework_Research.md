@@ -21,6 +21,8 @@ vs
 
 The latest version of Entity Framework is available as the [EntityFramework NuGet Package](https://www.nuget.org/packages/EntityFramework/)
 
+Microsoft Learn has brilliant tutorials on EF Core - an example of which can be found [here -> Getting Started with EF Core](https://learn.microsoft.com/en-gb/ef/core/get-started/overview/first-app?tabs=netcore-cli).
+
 ## Why use Entity Framework?
 
 Entity Framework can simplify the creation of a database tailored to you objects, or you can use it to map objects to an existing database. It can make it easier for developers by allowing data manipulation using .NET Objects and tooling such as [LINQ](https://learn.microsoft.com/en-us/dotnet/csharp/linq/)
@@ -119,18 +121,24 @@ Entity Framework currently supports:
 
 ## How do I troubleshoot or write custom SQL?
 
-You can use [FromSql](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.relationalqueryableextensions.fromsql) to begin a LINQ query based on a SQL Query:  
-
-__NOTE__: This was introduced in EF Core 7.0. When using older versions, use [FromSqlInterpolated](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.relationalqueryableextensions.fromsqlinterpolated) instead.
-
-```
-var blogs = context.Blogs
-    .FromSql($"SELECT * FROM dbo.Blogs")
-    .ToList();
-```
-
-__NOTE__: This can only be used directly on a DbSet. It cannot be composed over an arbitrary LINQ query.
-
 A tutorial on using Raw SQL can be found [here](https://learn.microsoft.com/en-gb/ef/core/querying/sql-queries?tabs=sqlserver) - please note that it is important to maintain best practices for defending against SQL Injection if you take this approach, and as such it is not recommended for normal interactions with the DB.
 
 ## Advantages & Disadvantages
+
+### Advantages
++ Can simplify data access via .NET objects
++ Strongly typed through use of LINQ can help catch errors at compile-time and make code more readable.
++ Can track and automatically save changes to objects.
++ Can reduce number of database calls with Eager Loading.
++ Supports easy-to-use schema migrations.
++ Cross-platform.
++ Integrates well with code-gen and scaffolding features in Visual Studio and JetBrains Rider.
+  
+
+### Disadvantages
+- Can add performance overhead due to the added abstraction layer - might not be best suited to performance critical applications
+- May struggle with complex queries by potentially generating less efficient SQL than a suitably knowledgable developer.
+- There may be a considerable learning curve for developers who are not familiar with ORMs or come from a pure/raw SQL background.
+- Limited control due to abstraction of many database controls.
+- If lazy-loading is not managed properly it may cause performance issues with excess database calls.
+- Caution needed to ensure compatibility with more niche DB providers.
