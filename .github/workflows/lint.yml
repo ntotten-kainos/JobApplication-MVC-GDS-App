@@ -1,0 +1,27 @@
+name: Lint Code
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Run EditorConfig Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3  # Use the latest version
+
+      - name: Install EditorConfig Checker
+        run: |
+          curl -sSLo editorconfig-checker.tar.gz https://github.com/editorconfig-checker/editorconfig-checker/releases/download/2.3.3/ec-linux-amd64.tar.gz
+          tar -xzf editorconfig-checker.tar.gz
+          sudo mv ec-linux-amd64 /usr/local/bin/editorconfig-checker
+
+      - name: Run EditorConfig Checker
+        run: editorconfig-checker --fix
