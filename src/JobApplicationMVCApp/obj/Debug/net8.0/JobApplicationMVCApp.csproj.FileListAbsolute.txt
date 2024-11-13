@@ -144,7 +144,6 @@
 /Users/niallmccloy/dotnetJobSite/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/obj/Debug/net8.0/ref/JobApplicationMVCApp.dll
 /Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/bin/Debug/net8.0/appsettings.Development.json
 /Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/bin/Debug/net8.0/appsettings.json
-/Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/bin/Debug/net8.0/Views/Shared/package.json
 /Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/bin/Debug/net8.0/app.db
 /Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/bin/Debug/net8.0/JobApplicationMVCApp.staticwebassets.runtime.json
 /Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/bin/Debug/net8.0/JobApplicationMVCApp
