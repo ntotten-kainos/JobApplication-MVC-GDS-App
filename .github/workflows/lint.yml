@@ -1,29 +1,14 @@
-name: Lint Code
+name: lint
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
 
 jobs:
-  lint:
-    name: Run EditorConfig Lint
-    runs-on: ubuntu-latest
-
+  editorconfig:
+    runs-on: ubuntu-20.04
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3  # Use the latest version
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3  # Ensure Node.js is available
-        with:
-          node-version: '18'  # Specify a version compatible with editorconfig-checker
-
-      - name: Install EditorConfig Checker
-        run: npm install -g editorconfig-checker
-
-      - name: Run EditorConfig Checker
-        run: editorconfig-checker --fix
+      - uses: actions/checkout@v4
+      - uses: editorconfig-checker/action-editorconfig-checker@main
+      - run: editorconfig-checker
