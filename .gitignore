@@ -80,3 +80,4 @@ fabric.properties
 
 #chromium plugin for accessibility testing.
 node_modules/puppeteer/.local-chromium
+node_modules/puppeteer/.local-chromium/mac-674921/chrome-mac/Chromium.app/Contents/Frameworks/Chromium Framework.framework/Versions/77.0.3844.0/Chromium Framework
