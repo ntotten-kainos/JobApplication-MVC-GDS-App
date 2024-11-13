@@ -17,11 +17,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3  # Use the latest version
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3  # Ensure Node.js is available
+        with:
+          node-version: '18'  # Specify a version compatible with editorconfig-checker
+
       - name: Install EditorConfig Checker
-        run: |
-          curl -sSLo editorconfig-checker.tar.gz https://github.com/editorconfig-checker/editorconfig-checker/releases/download/2.3.3/ec-linux-amd64.tar.gz
-          tar -xzf editorconfig-checker.tar.gz
-          sudo mv ec-linux-amd64 /usr/local/bin/editorconfig-checker
+        run: npm install -g editorconfig-checker
 
       - name: Run EditorConfig Checker
         run: editorconfig-checker --fix
