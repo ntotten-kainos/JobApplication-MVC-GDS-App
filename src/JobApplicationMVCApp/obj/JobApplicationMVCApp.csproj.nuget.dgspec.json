@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/JobApplicationMVCApp.csproj": {}
+    "/Users/niallmccloy/dotnetJobSite/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/JobApplicationMVCApp.csproj": {}
   },
   "projects": {
-    "/Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/JobApplicationMVCApp.csproj": {
+    "/Users/niallmccloy/dotnetJobSite/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/JobApplicationMVCApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/JobApplicationMVCApp.csproj",
+        "projectUniqueName": "/Users/niallmccloy/dotnetJobSite/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/JobApplicationMVCApp.csproj",
         "projectName": "JobApplicationMVCApp",
-        "projectPath": "/Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/JobApplicationMVCApp.csproj",
-        "packagesPath": "/Users/katiemcallister/.nuget/packages/",
-        "outputPath": "/Users/katiemcallister/RiderProjects/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/obj/",
+        "projectPath": "/Users/niallmccloy/dotnetJobSite/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/JobApplicationMVCApp.csproj",
+        "packagesPath": "/Users/niallmccloy/.nuget/packages/",
+        "outputPath": "/Users/niallmccloy/dotnetJobSite/JobApplication-MVC-GDS-App/src/JobApplicationMVCApp/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/katiemcallister/.nuget/NuGet/NuGet.Config"
+          "/Users/niallmccloy/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
