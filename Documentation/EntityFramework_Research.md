@@ -36,7 +36,7 @@ Entity Framework can help to generate a database and DbContext from your models
    EF abstracts the database interactions, allowing you to work with data as objects. This reduces the amount of boilerplate code you need to write.
 
     Example: Without EF, fetching data might look like this:
-    ```
+    ```csharp
     using (SqlConnection conn = new SqlConnection(connectionString))
     {
         string query = "SELECT * FROM Customers WHERE TransactionDate > '2023-01-01'";
@@ -50,7 +50,7 @@ Entity Framework can help to generate a database and DbContext from your models
     ```  
 
     Whereas using Entity Framework and LINQ could look like this:  
-    ```
+    ```csharp
     using (var context = new MyDbContext())
     {
         var customers = context.Customers
@@ -64,7 +64,7 @@ Entity Framework can help to generate a database and DbContext from your models
    EF allows you to write strongly typed queries using LINQ, which are checked at compile time, reducing runtime errors.  
 
    Example:
-    ```  
+    ```csharp  
     var activeUsers = context.Users
                             .Where(u => u.IsActive)
                             .OrderBy(u => u.LastName)
@@ -77,7 +77,7 @@ Entity Framework can help to generate a database and DbContext from your models
    EF automatically tracks changes made to objects and saves them to the database when you call SaveChanges(). This makes it easier to manage updates.  
 
    Example:
-   ```
+   ```csharp
    var user = context.Users.Find(userId);
    user.LastName = "UpdatedLastName";
    context.SaveChanges();
@@ -88,7 +88,7 @@ Entity Framework can help to generate a database and DbContext from your models
    Entity Framework lets you include related data as part of the initial query, reducing the number of  database calls.  
 
    Example:  
-   ```
+   ```csharp
    var usersWithOrders = context.Users
                              .Include(u => u.Orders)
                              .ToList();  
