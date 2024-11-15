@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using JobApplicationMVCApp.Models;
+using Microsoft.Extensions.Logging;
 
 namespace JobApplicationMVCApp.Controllers;
 
@@ -19,6 +20,16 @@ public class HomeController : Controller
     }
 
     public IActionResult Privacy()
+    {
+        return View();
+    }
+    
+    public IActionResult AdminHomepage()
+    {
+        return View();
+    }
+
+    public IActionResult ManageRoles()
     {
         return View();
     }
