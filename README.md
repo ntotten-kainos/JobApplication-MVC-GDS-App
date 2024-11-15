@@ -89,3 +89,23 @@ Your project now has access to the Government Design System Precompiled Assets v
    Note: You will have to copy and paste the HTML examples as nunjucks is not compatible/configured here.
     [GOV.UK Design System Components](https://design-system.service.gov.uk/components/)
 2. Here is a link to an example repo: [Example GDS Repo](https://github.com/ntotten-kainos/GDS-Example-Repo-MVC-DOTNET)
+
+# How to Lint Locally
+
+## Prerequisites 
+
+### Make sure Rider is configured to use .editorconfig (On Mac):
+    1. Click on 'JetBrains Rider' in the top left of the screen between the Apple logo and 'File'
+    2. Click 'Settings...'
+    3. Go to 'Editor' -> 'CodeStyle'
+    4. Ensure 'Enable EditorConfig Support' is checked
+
+### Run the command `npm install -g editorconfig-checker` to install editorconfig-checker globally
+```bash
+npm install -g editorconfig-checker
+````
+
+### Run the command `editorconfig-checker` to check code for linting errors
+```bash
+editorconfig-checker 
+```
