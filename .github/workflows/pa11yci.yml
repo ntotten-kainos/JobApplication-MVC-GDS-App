@@ -27,7 +27,6 @@ jobs:
           dotnet restore ./src/JobApplicationMVCApp/JobApplicationMVCApp.csproj
           dotnet build ./src/JobApplicationMVCApp/JobApplicationMVCApp.csproj
           dotnet run --project ./src/JobApplicationMVCApp/JobApplicationMVCApp.csproj &
-          sleep 20
-
+          
       - name: Run Pa11y CI
         run: npx pa11y-ci
