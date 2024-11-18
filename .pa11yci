@@ -4,6 +4,7 @@
     "standard": "WCAG2AA"
   },
   "urls": [
+    "https://localhost:5091"
     "http://localhost:5091"
   ]
 }
