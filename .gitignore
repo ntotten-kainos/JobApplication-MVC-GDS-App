@@ -485,3 +485,4 @@ $RECYCLE.BIN/
 
 # intermediate files and build artifacts that are generated during the build process.
 /obj/
+/bin/
