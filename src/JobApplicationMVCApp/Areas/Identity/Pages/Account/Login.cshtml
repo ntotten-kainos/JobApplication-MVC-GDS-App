@@ -6,8 +6,8 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
         <section>
             <form id="account" method="post">
                 <h2>Use a local account to log in.</h2>
@@ -31,6 +31,7 @@
                         </label>
                     </div>
                 </div>
+                <br/>
                 <div>
                     <button id="login-submit" type="submit" class="govuk-button">Log in</button>
                 </div>
@@ -39,7 +40,7 @@
                         <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
                     </p>-->
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        <a class="govuk-button govuk-button--secondary" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
                     </p>
                     <!--<p>
                         <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
@@ -48,7 +49,7 @@
             </form>
         </section>
     </div>
-    <div class="col-md-6 col-md-offset-2">
+    <div class="govuk-grid-column-one-third">
         <section>
             <h3>Use another service to log in.</h3>
             <hr />
