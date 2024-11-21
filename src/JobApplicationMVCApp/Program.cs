@@ -22,7 +22,11 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddIdentity<ApplicationUser, IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
+// TODO 
+// Figure out how what changes are needed to register custom identity - or if we even need it.
+// Default works for now. 
+
+// builder.Services.AddIdentity<ApplicationUser, IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
 
