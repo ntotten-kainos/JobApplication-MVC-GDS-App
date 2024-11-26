@@ -35,7 +35,6 @@ namespace JobApplicationMVCApp.Models
 
         public Department Department { get; set; } = null!;
         
-   
         [Range(0, double.MaxValue, ErrorMessage = "Salary must be a positive number.")]
         public double? Salary { get; set; }
         

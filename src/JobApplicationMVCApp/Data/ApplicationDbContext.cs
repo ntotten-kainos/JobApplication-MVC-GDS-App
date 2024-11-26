@@ -10,20 +10,18 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
     }
-	 public DbSet<JobPosting> JobPostings { get; set; }
-        	public DbSet<Location> Locations { get; set; }
-        	public DbSet<Department> Departments { get; set; }
+    public DbSet<JobPosting> JobPostings { get; set; }
+        public DbSet<Location> Locations { get; set; }
+            public DbSet<Department> Departments { get; set; }
 
-        	protected override void OnModelCreating(ModelBuilder modelBuilder)
-        	{
-            	modelBuilder.Entity<JobPosting>()
-                	.Property(j => j.Type)
-               	 	.HasConversion<string>();
+            protected override void OnModelCreating(ModelBuilder modelBuilder)
+            {
+                modelBuilder.Entity<JobPosting>()
+                    .Property(j => j.Type)
+                    .HasConversion<string>();
+                modelBuilder.Entity<JobPosting>()
+                    .Property(j => j.Status)
+                    .HasConversion<string>();
 
-            	modelBuilder.Entity<JobPosting>()
-                	.Property(j => j.Status)
-                	.HasConversion<string>();
-
-            	base.OnModelCreating(modelBuilder);
-        	}
-}
+            base.OnModelCreating(modelBuilder);
+            }
