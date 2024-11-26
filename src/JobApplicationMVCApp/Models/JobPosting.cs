@@ -29,7 +29,7 @@ namespace JobApplicationMVCApp.Models
         
         public Location Location { get; set; } = null!;
         
-        [Required]
+        [Required(ErrorMessage = "Department ID is required.")]
         [ForeignKey("Department")]
         public int JobDepartmentId { get; set; }
 
@@ -39,8 +39,8 @@ namespace JobApplicationMVCApp.Models
         [Range(0, double.MaxValue, ErrorMessage = "Salary must be a positive number.")]
         public double? Salary { get; set; }
         
-        [Required]
-        [FutureDate(ErrorMessage = "Closing date must be in the future.")]
+        [Required(ErrorMessage = "Closing Date is required.")]
+        [FutureDate(ErrorMessage = "Closing Date must be in the future.")]
         public DateTime ClosingDate { get; set; }
         
         public enum JobType
@@ -60,7 +60,7 @@ namespace JobApplicationMVCApp.Models
         }
         public JobStatus Status { get; set; } = JobStatus.Draft;
         
-        [Required]
+        [Required(ErrorMessage = "Date Posted is required.")]
         public DateTime DatePosted { get; set; }
         
     }
