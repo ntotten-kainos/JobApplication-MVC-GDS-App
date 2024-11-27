@@ -8,9 +8,11 @@ namespace JobApplicationMVCApp.Models
         [Required (ErrorMessage = "Applicant ID is required.")]
         [ForeignKey("ApplicantId")]
         public int ApplicantId { get; set; }
+        public Applicant Applicant { get; set; } = null!;
         
         [Required (ErrorMessage = "Job Posting ID is required.")]
         [ForeignKey("JobPostingId")]
-        public string JobPostingId { get; set; }
+        public int JobPostingId { get; set; }
+        public JobPosting JobPosting { get; set; } = null!;
     }
 }
