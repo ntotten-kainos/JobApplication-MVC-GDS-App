@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using JobApplicationMVCApp.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobApplicationMVCApp.Data;
@@ -27,4 +28,22 @@ public class ApplicationDbContext : IdentityDbContext
 
         optionsBuilder.UseMySql(mySqlConnString, ServerVersion.AutoDetect(mySqlConnString));
     }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Configure JobPosting enums to use string conversion
+        modelBuilder.Entity<JobPosting>()
+            .Property(j => j.Type)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<JobPosting>()
+            .Property(j => j.Status)
+            .HasConversion<string>();
+
+        base.OnModelCreating(modelBuilder); // Call the base class method
+    }
+    
+    public DbSet<JobPosting> JobPostings { get; set; }
+    public DbSet<Location> Locations { get; set; }
+    public DbSet<Department> Departments { get; set; }
 }
