@@ -1,0 +1,86 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <section>
+            <form id="account" method="post">
+                <h2>Use a local account to log in.</h2>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="govuk-form-group">
+                    <label asp-for="Input.Email" class="govuk-label">Email</label>
+                    <input asp-for="Input.Email" class="govuk-input" autocomplete="username" aria-required="true" placeholder="name@example.com"/>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="govuk-form-group">
+                    <label asp-for="Input.Password" class="govuk-label">Password</label>
+                    <input asp-for="Input.Password" class="govuk-input" autocomplete="current-password" aria-required="true" placeholder="password"/>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="govuk-checkboxes">
+                    <div class="govuk-checkboxes__item">
+                        <input class="govuk-checkboxes__input" asp-for="Input.RememberMe"/>
+                        
+                        <label asp-for="Input.RememberMe" class="govuk-label govuk-checkboxes__label">
+                        </label>
+                    </div>
+                </div>
+                <br/>
+                <div>
+                    <button id="login-submit" type="submit" class="govuk-button">Log in</button>
+                </div>
+                <div>
+                    <!--<p>
+                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                    </p>-->
+                    <p>
+                        <a class="govuk-button govuk-button--secondary" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                    </p>
+                    <!--<p>
+                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                    </p>-->
+                </div>
+            </form>
+        </section>
+    </div>
+    <div class="govuk-grid-column-one-third">
+        <section>
+            <h3>Use another service to log in.</h3>
+            <hr />
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                            about setting up this ASP.NET application to support logging in via external services</a>.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins!)
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
