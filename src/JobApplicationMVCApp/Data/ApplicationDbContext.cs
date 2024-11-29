@@ -21,7 +21,6 @@ namespace JobApplicationMVCApp.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configure JobPosting enums to use string conversion
             modelBuilder.Entity<JobPosting>()
                 .Property(j => j.Type)
                 .HasConversion<string>();
@@ -30,10 +29,10 @@ namespace JobApplicationMVCApp.Data
                 .Property(j => j.Status)
                 .HasConversion<string>();
 
-			modelBuilder.Entity<Applicant>()
-        	    .OwnsOne(a => a.Address);
-		    modelBuilder.Entity<Location>()
-        	    .OwnsOne(a => a.Address);
+            modelBuilder.Entity<Applicant>()
+                .OwnsOne(a => a.Address);
+            modelBuilder.Entity<Location>()
+                .OwnsOne(a => a.Address);
 
             modelBuilder.Entity<Applicant>()
                 .HasIndex(a => a.Email)
@@ -44,23 +43,23 @@ namespace JobApplicationMVCApp.Data
                 .HasDiscriminator<string>("Discriminator")
                 .HasValue<Employee>("Employee");
 
-            // Configure JobApplication as a keyless entity
+
             modelBuilder.Entity<JobApplication>()
                 .HasNoKey()
-                .ToTable("JobApplications"); // Optional: Specify the table name explicitly
+                .ToTable("JobApplications"); 
 
-            // Configure relationships for JobApplication
+        
             modelBuilder.Entity<JobApplication>()
                 .HasOne(ja => ja.JobPosting)
-                .WithMany() // No navigation back from JobPosting to JobApplication
+                .WithMany() /
                 .HasForeignKey(ja => ja.JobPostingId);
 
             modelBuilder.Entity<JobApplication>()
                 .HasOne(ja => ja.Applicant)
-                .WithMany() // No navigation back from Applicant to JobApplication
+                .WithMany() 
                 .HasForeignKey(ja => ja.ApplicantId);
 
-            base.OnModelCreating(modelBuilder); // Call the base class method
+            base.OnModelCreating(modelBuilder); 
         }
     }
 }

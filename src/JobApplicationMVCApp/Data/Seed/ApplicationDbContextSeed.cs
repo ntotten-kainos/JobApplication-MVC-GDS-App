@@ -44,4 +44,4 @@ namespace JobApplicationMVCApp.Data.Seed
                 }
             }
         }
-   }
+}
