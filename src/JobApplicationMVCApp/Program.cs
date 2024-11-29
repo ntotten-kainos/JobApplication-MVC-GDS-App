@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using JobApplicationMVCApp.Data.Seed;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,16 +23,25 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+
+
 // TODO 
 // Figure out how what changes are needed to register custom identity - or if we even need it.
 // Default works for now. 
 
 // builder.Services.AddIdentity<ApplicationUser, IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
-
+builder.Services.AddIdentity<Employee, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await ApplicationDbContextSeed.SeedRolesAndAdminAsync(services);
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
