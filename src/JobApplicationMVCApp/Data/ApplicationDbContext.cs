@@ -51,7 +51,7 @@ namespace JobApplicationMVCApp.Data
         
             modelBuilder.Entity<JobApplication>()
                 .HasOne(ja => ja.JobPosting)
-                .WithMany() /
+                .WithMany() 
                 .HasForeignKey(ja => ja.JobPostingId);
 
             modelBuilder.Entity<JobApplication>()
