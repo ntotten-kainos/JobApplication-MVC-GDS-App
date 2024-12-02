@@ -51,6 +51,8 @@ namespace JobApplicationMVCApp.Controllers
         {
             ViewData["JobDepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentName");
             ViewData["JobLocationId"] = new SelectList(_context.Locations, "LocationId", "LocationCity");
+            ViewData["JobTypes"] = Enum.GetValues(typeof(JobPosting.JobType)).Cast<JobPosting.JobType>().ToList();
+            ViewData["Statuses"] = Enum.GetValues(typeof(JobPosting.JobStatus)).Cast<JobPosting.JobStatus>().ToList();
             return View();
         }
 
@@ -81,6 +83,8 @@ namespace JobApplicationMVCApp.Controllers
             }
             ViewData["JobDepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentName", jobPosting.JobDepartmentId);
             ViewData["JobLocationId"] = new SelectList(_context.Locations, "LocationId", "LocationCity", jobPosting.JobLocationId);
+            ViewData["JobTypes"] = Enum.GetValues(typeof(JobPosting.JobType)).Cast<JobPosting.JobType>().ToList();
+            ViewData["Statuses"] = Enum.GetValues(typeof(JobPosting.JobStatus)).Cast<JobPosting.JobStatus>().ToList();            
             return View(jobPosting);
         }
 
