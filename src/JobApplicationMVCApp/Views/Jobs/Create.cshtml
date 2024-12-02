@@ -7,52 +7,52 @@
 
 <h1>Create</h1>
 
-<h4>JobPosting</h4>
+<h4>Job Posting</h4>
 <hr />
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <form asp-action="Create">
+        <form asp-action="Create" class="govuk-grid-column-two-thirds">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="govuk-form-group">
-                <label asp-for="JobTitle" class="govuk-label"></label>
+                <label asp-for="JobTitle" class="govuk-label">Job Title</label>
                 <input asp-for="JobTitle" class="govuk-input" />
                 <span asp-validation-for="JobTitle" class="text-danger"></span>
             </div>
             <div class="govuk-form-group">
-                <label asp-for="JobDescription" class="govuk-label"></label>
+                <label asp-for="JobDescription" class="govuk-label">Description</label>
                 <input asp-for="JobDescription" class="govuk-input" />
                 <span asp-validation-for="JobDescription" class="text-danger"></span>
             </div>
             <div class="govuk-form-group">
-                <label asp-for="JobRequirements" class="govuk-label"></label>
+                <label asp-for="JobRequirements" class="govuk-label">Requirements</label>
                 <input asp-for="JobRequirements" class="govuk-input" />
                 <span asp-validation-for="JobRequirements" class="text-danger"></span>
             </div>
             <div class="govuk-form-group">
-                <label asp-for="JobLocationId" class="govuk-label"></label>
+                <label asp-for="JobLocationId" class="govuk-label">Location</label>
                 <select asp-for="JobLocationId" class ="govuk-input" asp-items="ViewBag.JobLocationId"></select>
             </div>
             <div class="govuk-form-group">
-                <label asp-for="JobDepartmentId" class="govuk-label"></label>
+                <label asp-for="JobDepartmentId" class="govuk-label">Department</label>
                 <select asp-for="JobDepartmentId" class ="govuk-input" asp-items="ViewBag.JobDepartmentId"></select>
             </div>
             <div class="govuk-form-group">
-                <label asp-for="Salary" class="govuk-label"></label>
+                <label asp-for="Salary" class="govuk-label">Salary</label>
                 <input asp-for="Salary" class="govuk-input" />
                 <span asp-validation-for="Salary" class="text-danger"></span>
             </div>
             <div class="govuk-form-group">
-                <label asp-for="ClosingDate" class="govuk-label"></label>
+                <label asp-for="ClosingDate" class="govuk-label">Closing Date</label>
                 <input asp-for="ClosingDate" class="govuk-input" />
                 <span asp-validation-for="ClosingDate" class="text-danger"></span>
             </div>
             <div class="govuk-form-group">
-                <label asp-for="Type" class="govuk-label"></label>
+                <label asp-for="Type" class="govuk-label">Job Type</label>
                 <select asp-for="Type" class="govuk-input"></select>
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="govuk-form-group">
-                <label asp-for="Status" class="govuk-label"></label>
+                <label asp-for="Status" class="govuk-label">Status</label>
                 <select asp-for="Status" class="govuk-input"></select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
@@ -69,6 +69,6 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="govuk-link">Back to List</a>
 </div>
 
