@@ -59,13 +59,48 @@ namespace JobApplicationMVCApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("JobPostingId,JobTitle,JobDescription,JobRequirements,JobLocationId,JobDepartmentId,Salary,ClosingDate,Type,Status,DatePosted")] JobPosting jobPosting)
+        public async Task<IActionResult> Create([Bind("JobPostingId,JobTitle,JobDescription,JobRequirements,JobLocationId,JobDepartmentId,Salary,ClosingDate,Type,Status")] JobPosting jobPosting, string action)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(jobPosting);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                switch (action)
+                {
+                    case "Create":  // Assign date posted and add to postings table.
+                        jobPosting.DatePosted = DateTime.Now;
+                        _context.JobPostings.Add(jobPosting);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+
+                    case "Draft":   // Save to draft model and add to drafts table.
+                        var draftJob = new DraftJob
+                        {
+                            JobPostingId = jobPosting.JobPostingId,
+                            JobTitle = jobPosting.JobTitle,
+                            JobDescription = jobPosting.JobDescription,
+                            JobRequirements = jobPosting.JobRequirements,
+                            JobLocationId = jobPosting.JobLocationId,
+                            JobDepartmentId = jobPosting.JobDepartmentId,
+                            Salary = jobPosting.Salary,
+                            ClosingDate = jobPosting.ClosingDate,
+                            Type = jobPosting.Type,
+                            Status = jobPosting.Status
+                        };
+                        _context.DraftJobs.Add(draftJob);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+
+                    case "Delete":  // Check if exists in drafts table and if yes, then delete it.
+                        var draftJobToDelete = await _context.DraftJobs.FindAsync(jobPosting.JobPostingId);
+                        if (draftJobToDelete != null)
+                        {
+                            _context.DraftJobs.Remove(draftJobToDelete);
+                            await _context.SaveChangesAsync();
+                        }
+                        return RedirectToAction(nameof(Index));
+
+                    default:
+                        break;
+                }
             }
             ViewData["JobDepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentName", jobPosting.JobDepartmentId);
             ViewData["JobLocationId"] = new SelectList(_context.Locations, "LocationId", "LocationCity", jobPosting.JobLocationId);
