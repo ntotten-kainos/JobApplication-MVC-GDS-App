@@ -49,12 +49,12 @@
                 </div>
                 <div class="govuk-form-group">
                     <label asp-for="Type" class="govuk-label">Job Type</label>
-                    <select asp-for="Type" class="govuk-input"></select>
+                    <select asp-for="Type" class="govuk-input" asp-items="ViewBag.JobTypes"></select>
                     <span asp-validation-for="Type" class="text-danger"></span>
                 </div>
                 <div class="govuk-form-group">
                     <label asp-for="Status" class="govuk-label">Status</label>
-                    <select asp-for="Status" class="govuk-input"></select>
+                    <select asp-for="Status" class="govuk-input" asp-items="ViewBag.Statuses"></select>
                     <span asp-validation-for="Status" class="text-danger"></span>
                 </div>
                 @* <div class="govuk-form-group"> *@
