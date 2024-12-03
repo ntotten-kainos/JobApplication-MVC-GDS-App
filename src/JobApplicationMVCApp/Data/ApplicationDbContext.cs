@@ -31,6 +31,16 @@ public class ApplicationDbContext : IdentityDbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<JobPosting>()
+            .HasOne(j => j.Location)
+            .WithMany()
+            .HasForeignKey(j => j.JobLocationId);
+
+        modelBuilder.Entity<JobPosting>()
+            .HasOne(j => j.Department)
+            .WithMany()
+            .HasForeignKey(j => j.JobDepartmentId);
+        
         // Configure JobPosting enums to use string conversion
         modelBuilder.Entity<JobPosting>()
             .Property(j => j.Type)

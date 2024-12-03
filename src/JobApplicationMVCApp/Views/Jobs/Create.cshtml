@@ -32,10 +32,12 @@
                 <div class="govuk-form-group">
                     <label asp-for="JobLocationId" class="govuk-label">Location</label>
                     <select asp-for="JobLocationId" class="govuk-input" asp-items="ViewBag.JobLocationId"></select>
+                    <span asp-validation-for="JobLocationId" class="govuk-error-message"></span>
                 </div>
                 <div class="govuk-form-group">
                     <label asp-for="JobDepartmentId" class="govuk-label">Department</label>
                     <select asp-for="JobDepartmentId" class="govuk-input" asp-items="ViewBag.JobDepartmentId"></select>
+                    <span asp-validation-for="JobDepartmentId" class="text-danger"></span>
                 </div>
                 <div class="govuk-form-group">
                     <label asp-for="Salary" class="govuk-label">Salary</label>
@@ -49,12 +51,20 @@
                 </div>
                 <div class="govuk-form-group">
                     <label asp-for="Type" class="govuk-label">Job Type</label>
-                    <select asp-for="Type" class="govuk-input" asp-items="ViewBag.JobTypes"></select>
+                    
+                    @Html.DropDownList("Type",
+                        Html.GetEnumSelectList<JobPosting.JobType>(),
+                        "Select Job Type",new { @class = "govuk-input" })
+                    
                     <span asp-validation-for="Type" class="text-danger"></span>
                 </div>
                 <div class="govuk-form-group">
                     <label asp-for="Status" class="govuk-label">Status</label>
-                    <select asp-for="Status" class="govuk-input" asp-items="ViewBag.Statuses"></select>
+                    
+                    @Html.DropDownList("Status",
+                        Html.GetEnumSelectList<JobPosting.JobStatus>(),
+                        "Select Job Status", new { @class = "govuk-input" })
+                    
                     <span asp-validation-for="Status" class="text-danger"></span>
                 </div>
                 @* <div class="govuk-form-group"> *@

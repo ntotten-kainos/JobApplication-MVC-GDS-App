@@ -51,8 +51,7 @@ namespace JobApplicationMVCApp.Controllers
         {
             ViewData["JobDepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentName");
             ViewData["JobLocationId"] = new SelectList(_context.Locations, "LocationId", "LocationCity");
-            ViewData["JobTypes"] = Enum.GetValues(typeof(JobPosting.JobType)).Cast<JobPosting.JobType>().ToList();
-            ViewData["Statuses"] = Enum.GetValues(typeof(JobPosting.JobStatus)).Cast<JobPosting.JobStatus>().ToList();
+            
             return View();
         }
 
@@ -63,11 +62,24 @@ namespace JobApplicationMVCApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("JobPostingId,JobTitle,JobDescription,JobRequirements,JobLocationId,JobDepartmentId,Salary,ClosingDate,Type,Status,DatePosted")] JobPosting jobPosting, string action)
         {
+            jobPosting.DatePosted = DateTime.Now;
+            Console.WriteLine("Location ID = " + jobPosting.JobLocationId);
+            Console.WriteLine("Department ID = " + jobPosting.JobDepartmentId);
+            if (!ModelState.IsValid)
+            {
+                foreach (var error in ModelState)
+                {
+                    foreach (var subError in error.Value.Errors)
+                    {
+                        Console.WriteLine($"Field: {error.Key}, Error: {subError.ErrorMessage}");
+                    }
+                }
+            }
+            
             if (ModelState.IsValid)
             {
                 if (action == "Create")
                 {
-                    jobPosting.DatePosted = DateTime.Now;
                     _context.JobPostings.Add(jobPosting);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -83,8 +95,6 @@ namespace JobApplicationMVCApp.Controllers
             }
             ViewData["JobDepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentName", jobPosting.JobDepartmentId);
             ViewData["JobLocationId"] = new SelectList(_context.Locations, "LocationId", "LocationCity", jobPosting.JobLocationId);
-            ViewData["JobTypes"] = Enum.GetValues(typeof(JobPosting.JobType)).Cast<JobPosting.JobType>().ToList();
-            ViewData["Statuses"] = Enum.GetValues(typeof(JobPosting.JobStatus)).Cast<JobPosting.JobStatus>().ToList();            
             return View(jobPosting);
         }
 
