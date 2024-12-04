@@ -54,7 +54,6 @@ public class ApplicationDbContext : IdentityDbContext
     }
     
     public DbSet<JobPosting> JobPostings { get; set; }
-    public DbSet<DraftJob> DraftJobs { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<Department> Departments { get; set; }
 }
