@@ -168,7 +168,6 @@ namespace JobApplicationMVCApp.Migrations
                     b.ToTable("Locations");
                 });
 
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -232,7 +231,6 @@ namespace JobApplicationMVCApp.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
 
-
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasMaxLength(13)
@@ -292,7 +290,6 @@ namespace JobApplicationMVCApp.Migrations
                     b.HasDiscriminator().HasValue("IdentityUser");
 
                     b.UseTphMappingStrategy();
-
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
