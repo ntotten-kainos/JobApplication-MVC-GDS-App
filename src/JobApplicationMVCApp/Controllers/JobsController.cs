@@ -63,8 +63,7 @@ namespace JobApplicationMVCApp.Controllers
         public async Task<IActionResult> Create([Bind("JobPostingId,JobTitle,JobDescription,JobRequirements,JobLocationId,JobDepartmentId,Salary,ClosingDate,Type,Status,DatePosted")] JobPosting jobPosting, string action)
         {
             jobPosting.DatePosted = DateTime.Now;
-            Console.WriteLine("Location ID = " + jobPosting.JobLocationId);
-            Console.WriteLine("Department ID = " + jobPosting.JobDepartmentId);
+            jobPosting.Department = _context.Departments.Find(jobPosting.JobDepartmentId);
             if (!ModelState.IsValid)
             {
                 foreach (var error in ModelState)

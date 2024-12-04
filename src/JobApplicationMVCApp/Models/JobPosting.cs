@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using JobApplicationMVCApp.ValidationAttributes;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace JobApplicationMVCApp.Models
 {
@@ -27,12 +28,14 @@ namespace JobApplicationMVCApp.Models
         [ForeignKey("Location")]
         public int JobLocationId { get; set; }
         
+        [ValidateNever]
         public Location Location { get; set; } = null!;
         
         [Required(ErrorMessage = "Department ID is required.")]
         [ForeignKey("Department")]
         public int JobDepartmentId { get; set; }
 
+        [ValidateNever]
         public Department Department { get; set; } = null!;
         
         [Range(0, double.MaxValue, ErrorMessage = "Salary must be a positive number.")]
