@@ -23,7 +23,7 @@ public class HomeController : Controller
     {
         return View();
     }
-    
+
     public IActionResult AdminHomepage()
     {
         return View();
@@ -33,7 +33,7 @@ public class HomeController : Controller
     {
         return View();
     }
-    
+
     public IActionResult ViewJobRoles()
     {
         return View();
