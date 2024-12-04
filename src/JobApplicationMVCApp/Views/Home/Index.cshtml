@@ -8,4 +8,9 @@
     <partial name="_LoginPartial"/>
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <ul class="govuk-service-navigation__list" id="navigation">
+        <li class="govuk-service-navigation__item">
+            @Html.ActionLink("Admin Page", "AdminHomepage", "Home", null, new { @class = "govuk-service-navigation__link" })
+        </li>
+    </ul>
 </div>
