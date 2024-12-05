@@ -47,8 +47,7 @@ namespace JobApplicationMVCApp.Controllers
 
             if (department != "all")
             {
-                jobs = jobs.Where(j => j.Department != null && 
-                                       j.Department.DepartmentName.ToLower() == department); }
+                jobs = jobs.Where(j => j.Department != null && j.Department.DepartmentName.ToLower() == department); }
 
             if (status != "all")
             {
