@@ -42,17 +42,15 @@ namespace JobApplicationMVCApp.Controllers
             // Apply filters if not "All"
             if (location != "all")
             {
-                jobs = jobs.Where(j => j.Location != null && 
-                                       (j.Location.LocationName.ToLower() == location ||
-                                        j.Location.LocationCity.ToLower() == location ||
-                                        j.Location.LocationPostCode.ToLower() == location));
+                jobs = jobs.Where(j => j.Location != null && (j.Location.LocationName.ToLower() == location ||
+                                                              j.Location.LocationCity.ToLower() == location ||
+                                                              j.Location.LocationPostCode.ToLower() == location));
             }
 
             if (department != "all")
             {
                 jobs = jobs.Where(j => j.Department != null && 
-                                       j.Department.DepartmentName.ToLower() == department);
-            }
+                                       j.Department.DepartmentName.ToLower() == department); }
 
             if (status != "all")
             {
