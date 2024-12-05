@@ -1,0 +1,43 @@
+name: Accessibility Testing
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  accessibility:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+
+      - name: Install Pa11y CI
+        run: npm install pa11y-ci
+
+      - name: Start .NET server
+        run: |
+          dotnet restore ./src/JobApplicationMVCApp/JobApplicationMVCApp.csproj
+          dotnet build ./src/JobApplicationMVCApp/JobApplicationMVCApp.csproj
+          dotnet run --project ./src/JobApplicationMVCApp/JobApplicationMVCApp.csproj &
+
+      - name: Wait until the server is up
+        run: |
+          for i in {1..20}; do
+          if curl --output /dev/null --silent --head --fail http://localhost:5091; then
+          echo "Server is up!"
+          break
+          fi
+          echo "Waiting for server..."
+          sleep 5
+          done
+    
+      - name: Run Pa11y CI
+        run: npx pa11y-ci

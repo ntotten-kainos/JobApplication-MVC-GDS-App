@@ -1,0 +1,9 @@
+{
+  "defaults": {
+    "timeout": 30000,
+    "standard": "WCAG2AA"
+  },
+  "urls": [
+    "http://localhost:5091"
+  ]
+}
