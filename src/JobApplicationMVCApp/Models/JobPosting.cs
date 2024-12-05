@@ -47,9 +47,13 @@ namespace JobApplicationMVCApp.Models
         
         public enum JobType
         {
+            [Display(Name = "Full Time")]
             FullTime,
+            [Display(Name = "Part Time")]
             PartTime,
+            [Display(Name = "Contract")]
             Contract,
+            [Display(Name = "Internship")]
             Internship
         }
         public JobType Type { get; set; } = JobType.FullTime;
