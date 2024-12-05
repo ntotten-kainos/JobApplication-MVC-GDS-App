@@ -62,10 +62,12 @@ namespace JobApplicationMVCApp.Models
         {
             Open,
             Closed,
+            Pending,
             Draft
         }
-        public JobStatus Status { get; set; } = JobStatus.Draft;
         
+        public JobStatus Status { get; set; }
+
         [Required(ErrorMessage = "Date Posted is required.")]
         public DateTime DatePosted { get; set; }
         
