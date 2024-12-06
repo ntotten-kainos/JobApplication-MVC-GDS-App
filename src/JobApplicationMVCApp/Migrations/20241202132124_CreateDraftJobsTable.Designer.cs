@@ -4,6 +4,7 @@ using JobApplicationMVCApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobApplicationMVCApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241202132124_CreateDraftJobsTable")]
+    partial class CreateDraftJobsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,6 +41,56 @@ namespace JobApplicationMVCApp.Migrations
                     b.HasKey("DepartmentId");
 
                     b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("JobApplicationMVCApp.Models.DraftJob", b =>
+                {
+                    b.Property<int>("JobPostingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("JobPostingId"));
+
+                    b.Property<DateTime>("ClosingDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("JobDepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("JobDescription")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<int>("JobLocationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("JobRequirements")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<double?>("Salary")
+                        .HasColumnType("double");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("JobPostingId");
+
+                    b.HasIndex("JobDepartmentId");
+
+                    b.HasIndex("JobLocationId");
+
+                    b.ToTable("DraftJobs");
                 });
 
             modelBuilder.Entity("JobApplicationMVCApp.Models.JobPosting", b =>
@@ -331,6 +384,25 @@ namespace JobApplicationMVCApp.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("JobApplicationMVCApp.Models.DraftJob", b =>
+                {
+                    b.HasOne("JobApplicationMVCApp.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("JobDepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JobApplicationMVCApp.Models.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("JobLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("JobApplicationMVCApp.Models.JobPosting", b =>
