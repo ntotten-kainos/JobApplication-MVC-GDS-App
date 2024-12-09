@@ -18,6 +18,8 @@ public class ApplicationDbContext : IdentityDbContext
         var username = Environment.GetEnvironmentVariable("DB_USERNAME");
         var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
         var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "3306"; // Default MySQL port
+		
+		Console.WriteLine($"Host: {host}, Name: {name}, User: {username}, Password: {password}, Port: {port}");
 
         if (string.IsNullOrEmpty(host) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {

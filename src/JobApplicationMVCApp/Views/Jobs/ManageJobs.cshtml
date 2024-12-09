@@ -1,0 +1,119 @@
+@model IEnumerable<JobApplicationMVCApp.Models.JobPosting>
+
+<html lang="en">
+<head>
+    <title>Manage Jobs</title>
+    <link rel="stylesheet" href="https://govuk-frontend.herokuapp.com/public/stylesheets/govuk-frontend-3.11.0.min.css">
+</head>
+<body class="govuk-template__body">
+<div class="govuk-width-container">
+    <main class="govuk-main-wrapper">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <h1 class="govuk-heading-xl">Manage Jobs</h1>
+                    </div>
+                    <div class="govuk-grid-column-one-third" style="text-align: right;">
+                        <button type="submit" class="govuk-button govuk-!-width-three-quarters" data-module="govuk-button" onclick="location.href='@Url.Action("Create", "Jobs")'">
+                            Post Jobs
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="govuk-grid-row">
+            <aside class="govuk-grid-column-one-third">
+                <nav class="govuk-navigation">
+                    <ul class="govuk-list">
+                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Jobs Created by You</button></li>
+                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Job Drafts</button></li>
+                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Closed Jobs</button></li>
+                    </ul>
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    <ul class="govuk-list">
+                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Filter by Location</button></li>
+                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Filter by Department</button></li>
+                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Filter by Status</button></li>
+                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Filter by Job Type</button></li>
+                    </ul>
+                </nav>
+            </aside>
+            <div class="govuk-grid-column-two-thirds">
+                @if (Model != null)
+                {
+                    <table class="govuk-table">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.JobTitle)</th>
+                            <th>@Html.DisplayNameFor(model => model.JobDescription)</th>
+                            <th>@Html.DisplayNameFor(model => model.JobRequirements)</th>
+                            <th>@Html.DisplayNameFor(model => model.Location)</th>
+                            <th>@Html.DisplayNameFor(model => model.Department)</th>
+                            <th>@Html.DisplayNameFor(model => model.Salary)</th>
+                            <th>@Html.DisplayNameFor(model => model.ClosingDate)</th>
+                            <th>@Html.DisplayNameFor(model => model.Type)</th>
+                            <th>@Html.DisplayNameFor(model => model.Status)</th>
+                            <th>@Html.DisplayNameFor(model => model.DatePosted)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.JobTitle)</td>
+                                <td>@Html.DisplayFor(modelItem => item.JobDescription)</td>
+                                <td>@Html.DisplayFor(modelItem => item.JobRequirements)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Location.LocationCity)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Department.DepartmentName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Salary)</td>
+                                <td>@Html.DisplayFor(modelItem => item.ClosingDate)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                                <td>@Html.DisplayFor(modelItem => item.DatePosted)</td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.JobPostingId">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.JobPostingId">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.JobPostingId">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <nav class="govuk-pagination" role="navigation" aria-label="results">
+                    <ul class="govuk-list govuk-pagination__list">
+                        <li class="govuk-pagination__item govuk-pagination__item--prev">
+                            <a class="govuk-link govuk-pagination__link" href="#">
+                                <span class="govuk-pagination__link-title">Previous</span>
+                            </a>
+                        </li>
+                        <li class="govuk-pagination__item">
+                            <a class="govuk-link govuk-pagination__link" href="#">1</a>
+                        </li>
+                        <li class="govuk-pagination__item">
+                            <a class="govuk-link govuk-pagination__link" href="#">2</a>
+                        </li>
+                        <li class="govuk-pagination__item">
+                            <a class="govuk-link govuk-pagination__link" href="#">3</a>
+                        </li>
+                        <li class="govuk-pagination__item govuk-pagination__item--next">
+                            <a class="govuk-link govuk-pagination__link" href="#">
+                                <span class="govuk-pagination__link-title">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>                
+                }
+                else
+                {
+                <p>No job postings found.</p>
+                }
+            </div>
+        </div>
+    </main>
+</div>
+<script src="https://govuk-frontend.herokuapp.com/public/javascripts/govuk-frontend-3.11.0.min.js"></script>
+</body>
+</html>

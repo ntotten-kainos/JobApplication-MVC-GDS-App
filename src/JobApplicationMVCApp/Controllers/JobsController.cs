@@ -96,6 +96,11 @@ namespace JobApplicationMVCApp.Controllers
             ViewData["JobLocationId"] = new SelectList(_context.Locations, "LocationId", "LocationCity", jobPosting.JobLocationId);
             return View(jobPosting);
         }
+        public IActionResult ManageJobs()
+        {
+            return View();
+        }
+
 
         // // GET: Jobs/Edit/5
         // public async Task<IActionResult> Edit(int? id)
