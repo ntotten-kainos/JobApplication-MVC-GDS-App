@@ -1,146 +1,14 @@
 @model IEnumerable<JobApplicationMVCApp.Models.JobPosting>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>View Job Roles</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/govuk-frontend/govuk/all.min.css">
-    <style>
-    .container {
-    margin-top: 1rem;
-    }
 
-    .content-wrapper {
-    display: flex;
-    gap: 1rem;
-    }
+@{
+ViewData["Title"] = "View Job Roles";
+Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-    .filters-section {
-    flex: 1;
-    max-width: 300px;
-    min-width: 250px;
-    background-color: #f3f2f1;
-    padding: 1rem;
-    border: 1px solid #b1b4b6;
-    border-radius: 4px;
-    max-height: max-content;
-    }
-
-    .filters-section .govuk-form-group {
-    margin-bottom: 1rem; /* Consistent spacing between elements */
-    }
-
-    .filters-section select {
-    width: 100%; /* Full-width dropdowns */
-    box-sizing: border-box; /* Prevents overflow issues */
-    }
-
-    .jobs-section {
-    flex: 3;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding: 1rem;
-    padding-top: 0;
-    margin-top: 0;
-   /* Adds spacing between job cards */
-    }
-
-    .header-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 0 1rem 0; /* Reduces whitespace below the header */
-    padding: 0; /* Removes any default padding */
-    }
-
-    .header-section .jobs-count {
-    margin: 0; /* Removes unnecessary margin */
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #333; /* Darker text for better readability */
-    }
-
-    .sort-by-form {
-    display: flex;
-    align-items: center;
-    gap: 1rem; /* Adds spacing between dropdown and button */
-        max-height: 60px;
-    }
-
-    .govuk-button {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
-    text-align: center;
-    margin-top: 10px; /* Adds spacing above buttons */
-    }
-
-    .job-card {
-    border: 1px solid #dcdcdc;
-    padding: 1rem;
-    border-radius: 5px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds subtle shadow for separation */
-    margin-bottom: 1.5rem; /* Adds spacing between job cards */
-    }
-
-    .job-card-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.5rem;
-        
-    }
-
-    .job-card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.5rem;
-    }
-
-    .job-title-location {
-        display: flex;
-        gap: 0.5rem; /* Adds slight spacing between title and location */
-    }
-
-    .job-title {
-        font-weight: bold;
-    }
-
-    .job-location {
-        font-style: italic;
-        color: #555; /* Subtle color for distinction */
-    }
-
-    .job-closing-date {
-        color: #6c757d;
-        font-size: 0.9rem;
-        text-align: right; /* Ensures alignment to the right */
-        flex-shrink: 0; /* Prevents the date from shrinking in flex layout */
-    }
-
-    .govuk-link:hover {
-    cursor: pointer;
-    }
-
-    #applybtn {
-    margin-top: 27px;
-    }
-
-    /* Responsive Design */
-    @@media (max-width: 768px) {
-    .content-wrapper {
-    flex-direction: column;
-    }
-
-    .filters-section,
-    .jobs-section {
-    width: 100%;
-    }
-    }
-</style>
-</head>
-<body>
+@section Styles {
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/govuk-frontend/govuk/all.min.css">
+<link rel="stylesheet" href="~/css/Jobslist.css" asp-append-version="true">
+}
 
 <div class="govuk-width-container">
     <!-- Back Link -->
@@ -264,6 +132,3 @@
         </div>
     </div>
 </div>
-
-</body>
-</html>
