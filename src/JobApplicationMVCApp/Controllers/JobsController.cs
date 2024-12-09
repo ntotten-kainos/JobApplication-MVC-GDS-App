@@ -19,7 +19,7 @@ namespace JobApplicationMVCApp.Controllers
             _context = context;
         }
 
-         // GET: Jobs
+            // GET: Jobs
             public async Task<IActionResult> Index(string location, string department, string status, string type, string sort)
             {
                 // Set default values to "All" if parameters are null
