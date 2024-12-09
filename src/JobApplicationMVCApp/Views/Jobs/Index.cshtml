@@ -160,12 +160,11 @@
                 <div class="govuk-form-group">
                     <label for="location" class="govuk-label">Location</label>
                     <select id="location" name="location" class="govuk-select">
-                        @foreach (var loc in new[] { "All", "London", "Birmingham", "Manchester", "Edinburgh", "Derry", "Bristol" })
+                        @foreach (var loc in new[] { "All", "London", "Birmingham", "Manchester", "Edinburgh", "Derry/Londonderry", "Bristol" })
                         {
                         <option value="@loc" selected="@((ViewData["SelectedLocation"]?.ToString().ToLower() == loc.ToLower()) ? "selected" : null)">@loc</option>
                         }
                     </select>
-
                 </div>
 
                 <!-- Department Dropdown -->
@@ -177,8 +176,6 @@
                         <option value="@dept" selected="@((ViewData["SelectedDepartment"]?.ToString().ToLower() == dept.ToLower()) ? "selected" : null)">@dept</option>
                         }
                     </select>
-
-
                 </div>
 
                 <!-- Status Dropdown -->
@@ -190,8 +187,6 @@
                         <option value="@stat" selected="@((ViewData["SelectedStatus"]?.ToString().ToLower() == stat.ToLower()) ? "selected" : null)">@stat</option>
                         }
                     </select>
-
-
                 </div>
 
                 <!-- Type Dropdown -->
@@ -203,14 +198,11 @@
                         <option value="@typ" selected="@((ViewData["SelectedType"]?.ToString().ToLower() == typ.ToLower()) ? "selected" : null)">@typ</option>
                         }
                     </select>
-
-
                 </div>
 
                 <button type="submit" class="govuk-button govuk-!-margin-top-2" data-module="govuk-button">Apply Filters</button>
             </form>
-
-
+            
             <!-- Jobs Section -->
             <div class="jobs-section">
                 <div class="header-section" style="margin-bottom: 5px">
@@ -231,11 +223,8 @@
                             <option value="@sort" selected="@((ViewData["SelectedSort"]?.ToString().ToLower() == sort.ToLower()) ? "selected" : null)">@label</option>
                             }
                         </select>
-
-
                         <button type="submit" class="govuk-button govuk-button--secondary" id="applybtn">Apply</button>
                     </form>
-
                 </div>
 
                 <main class="govuk-main-wrapper" style="padding: 0">
@@ -247,14 +236,12 @@
                         <div class="job-card-header">
                             <!-- Job title and location -->
                             <div class="job-title-location">
-                                
                                 <span class="job-title">
                                     <a href="/Job/Details/id" class="govuk-link">@job.JobTitle</a>
                                 </span>
                                 <span>-</span>
                                 <span class="job-location">@job.Location.LocationCity</span>
                             </div>
-                            <!-- Closing date aligned to the right -->
                             <div class="job-closing-date">
                                 Closing Date: @job.ClosingDate.ToShortDateString()
                             </div>
