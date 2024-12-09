@@ -19,11 +19,6 @@ public class ApplicationDbContext : IdentityDbContext
         var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
         var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "3306"; // Default MySQL port
 
-        Console.WriteLine($"DB_HOST: {host}");
-        Console.WriteLine($"DB_NAME: {name}");
-        Console.WriteLine($"DB_USERNAME: {username}");
-        Console.WriteLine($"DB_PASSWORD: {password}");
-
         if (string.IsNullOrEmpty(host) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {
             throw new InvalidOperationException("Database configuration environment variables are missing.");
@@ -61,5 +56,4 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<JobPosting> JobPostings { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<Department> Departments { get; set; }
-
 }
