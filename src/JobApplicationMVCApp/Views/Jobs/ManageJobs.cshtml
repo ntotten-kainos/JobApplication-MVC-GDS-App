@@ -4,6 +4,18 @@
 <head>
     <title>Manage Jobs</title>
     <link rel="stylesheet" href="https://govuk-frontend.herokuapp.com/public/stylesheets/govuk-frontend-3.11.0.min.css">
+    <style>
+        .govuk-table {
+            border-collapse: collapse;
+        }
+        .govuk-table th, .govuk-table td {
+            padding: 15px;
+            border: 1px solid #d3d3d3; 
+        }
+        .govuk-table th {
+            text-align: left; 
+        }
+    </style>
 </head>
 <body class="govuk-template__body">
 <div class="govuk-width-container">
@@ -16,7 +28,7 @@
                     </div>
                     <div class="govuk-grid-column-one-third" style="text-align: right;">
                         <button type="submit" class="govuk-button govuk-!-width-three-quarters" data-module="govuk-button" onclick="location.href='@Url.Action("Create", "Jobs")'">
-                            Post Jobs
+                            Post a Job
                         </button>
                     </div>
                 </div>
@@ -26,16 +38,16 @@
             <aside class="govuk-grid-column-one-third">
                 <nav class="govuk-navigation">
                     <ul class="govuk-list">
-                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Jobs Created by You</button></li>
-                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Job Drafts</button></li>
-                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Closed Jobs</button></li>
+                        <li><input type="checkbox" id="filter-created" data-filter="created-by" value="your-username"> Jobs Created by You</li>
+                        <li><input type="checkbox" id="filter-drafts" data-filter="status" value="Draft"> Job Drafts</li>
+                        <li><input type="checkbox" id="filter-closed" data-filter="status" value="Closed"> Closed Jobs</li>
                     </ul>
                     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
                     <ul class="govuk-list">
-                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Filter by Location</button></li>
-                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Filter by Department</button></li>
-                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Filter by Status</button></li>
-                        <li><button class="govuk-button govuk-button--secondary" data-module="govuk-button">Filter by Job Type</button></li>
+                        <li><input type="checkbox" id="filter-location" data-filter="location" value="London"> Filter by Location</li>
+                        <li><input type="checkbox" id="filter-department" data-filter="department" value="IT"> Filter by Department</li>
+                        <li><input type="checkbox" id="filter-status" data-filter="status" value="Open"> Filter by Status</li>
+                        <li><input type="checkbox" id="filter-type" data-filter="type" value="Full-Time"> Filter by Job Type</li>
                     </ul>
                 </nav>
             </aside>
@@ -46,36 +58,26 @@
                     <thead>
                         <tr>
                             <th>@Html.DisplayNameFor(model => model.JobTitle)</th>
-                            <th>@Html.DisplayNameFor(model => model.JobDescription)</th>
-                            <th>@Html.DisplayNameFor(model => model.JobRequirements)</th>
                             <th>@Html.DisplayNameFor(model => model.Location)</th>
                             <th>@Html.DisplayNameFor(model => model.Department)</th>
-                            <th>@Html.DisplayNameFor(model => model.Salary)</th>
-                            <th>@Html.DisplayNameFor(model => model.ClosingDate)</th>
-                            <th>@Html.DisplayNameFor(model => model.Type)</th>
-                            <th>@Html.DisplayNameFor(model => model.Status)</th>
-                            <th>@Html.DisplayNameFor(model => model.DatePosted)</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Status)
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="job-list">
                         @foreach (var item in Model)
                         {
-                            <tr>
+                            <tr data-status="@item.Status" data-location="@item.Location.LocationCity" data-department="@item.Department.DepartmentName" data-type="@item.Type">
                                 <td>@Html.DisplayFor(modelItem => item.JobTitle)</td>
-                                <td>@Html.DisplayFor(modelItem => item.JobDescription)</td>
-                                <td>@Html.DisplayFor(modelItem => item.JobRequirements)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Location.LocationCity)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Department.DepartmentName)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Salary)</td>
-                                <td>@Html.DisplayFor(modelItem => item.ClosingDate)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Type)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Status)</td>
-                                <td>@Html.DisplayFor(modelItem => item.DatePosted)</td>
                                 <td>
-                                    <a asp-action="Edit" asp-route-id="@item.JobPostingId">Edit</a> |
-                                    <a asp-action="Details" asp-route-id="@item.JobPostingId">Details</a> |
-                                    <a asp-action="Delete" asp-route-id="@item.JobPostingId">Delete</a>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.JobPostingId">Edit</a> 
                                 </td>
                             </tr>
                         }
@@ -104,7 +106,7 @@
                             </a>
                         </li>
                     </ul>
-                </nav>                
+                </nav>
                 }
                 else
                 {
@@ -115,5 +117,37 @@
     </main>
 </div>
 <script src="https://govuk-frontend.herokuapp.com/public/javascripts/govuk-frontend-3.11.0.min.js"></script>
+<script>
+    document.querySelectorAll('.govuk-checkboxes__input').forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            filterJobs();
+        });
+    });
+
+    function filterJobs() {
+        var rows = document.querySelectorAll('#job-list tr');
+        var filters = {};
+
+        document.querySelectorAll('.govuk-checkboxes__input:checked').forEach(function(checkbox) {
+            var filter = checkbox.getAttribute('data-filter');
+            var value = checkbox.value;
+            if (!filters[filter]) {
+                filters[filter] = [];
+            }
+            filters[filter].push(value);
+        });
+
+        rows.forEach(function(row) {
+            var show = true;
+            for (var filter in filters) {
+                if (filters[filter].indexOf(row.getAttribute('data-' + filter)) === -1) {
+                    show = false;
+                    break;
+                }
+            }
+            row.style.display = show ? '' : 'none';
+        });
+    }
+</script>
 </body>
 </html>

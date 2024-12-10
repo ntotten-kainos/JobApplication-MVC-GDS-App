@@ -16,7 +16,7 @@ public class ApplicationDbContext : IdentityDbContext
         var host = Environment.GetEnvironmentVariable("DB_HOST");
         var name = Environment.GetEnvironmentVariable("DB_NAME");
         var username = Environment.GetEnvironmentVariable("DB_USERNAME");
-        var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
+        var password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "";
         var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "3306"; // Default MySQL port
 		
 		Console.WriteLine($"Host: {host}, Name: {name}, User: {username}, Password: {password}, Port: {port}");
