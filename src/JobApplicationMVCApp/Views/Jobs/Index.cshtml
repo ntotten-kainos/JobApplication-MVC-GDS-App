@@ -1,90 +1,133 @@
 @model IEnumerable<JobApplicationMVCApp.Models.JobPosting>
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+ViewData["Title"] = "View Job Roles";
+Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.JobTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JobDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JobRequirements)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Department)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Salary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClosingDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DatePosted)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.JobTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.JobDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.JobRequirements)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location.LocationCity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Department.DepartmentName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Salary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClosingDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DatePosted)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.JobPostingId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.JobPostingId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.JobPostingId">Delete</a>
-            </td>
-        </tr>
+@section Styles {
+<link rel="stylesheet" href="~/css/Jobslist.css" asp-append-version="true">
 }
-    </tbody>
-</table>
+
+<div class="govuk-width-container">
+    <!-- Back Link -->
+    @Html.ActionLink("Back", "AdminHomepage", "Home", null, new { @class = "govuk-back-link" })
+
+    <div class="container">
+        <h1 class="govuk-heading-l">View Job Roles</h1>
+
+        <div class="content-wrapper">
+            <!-- Filters Section -->
+            <form method="get" action="/Jobs/Index" class="filters-section">
+            <h2 class="govuk-heading-m">Filter by</h2>
+                <!-- Hidden input for sort -->
+                <input type="hidden" name="sort" value="@ViewData["SelectedSort"]" />
+
+                <!-- Location Dropdown -->
+                <div class="govuk-form-group">
+                    <label for="location" class="govuk-label">Location</label>
+                    <select id="location" name="location" class="govuk-select">
+                        @foreach (var loc in new[] { "All", "London", "Birmingham", "Manchester", "Edinburgh", "Derry/Londonderry", "Bristol" })
+                        {
+                        <option value="@loc" selected="@((ViewData["SelectedLocation"]?.ToString().ToLower() == loc.ToLower()) ? "selected" : null)">@loc</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Department Dropdown -->
+                <div class="govuk-form-group">
+                    <label for="department" class="govuk-label">Department</label>
+                    <select id="department" name="department" class="govuk-select">
+                        @foreach (var dept in new[] { "All", "IT", "HR", "Finance" })
+                        {
+                        <option value="@dept" selected="@((ViewData["SelectedDepartment"]?.ToString().ToLower() == dept.ToLower()) ? "selected" : null)">@dept</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Status Dropdown -->
+                <div class="govuk-form-group">
+                    <label for="status" class="govuk-label">Status</label>
+                    <select id="status" name="status" class="govuk-select">
+                        @foreach (var stat in new[] { "All", "Open", "Closed" })
+                        {
+                        <option value="@stat" selected="@((ViewData["SelectedStatus"]?.ToString().ToLower() == stat.ToLower()) ? "selected" : null)">@stat</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Type Dropdown -->
+                <div class="govuk-form-group">
+                    <label for="type" class="govuk-label">Type</label>
+                    <select id="type" name="type" class="govuk-select">
+                        @foreach (var typ in new[] { "All", "Full-time", "Part-time" })
+                        {
+                        <option value="@typ" selected="@((ViewData["SelectedType"]?.ToString().ToLower() == typ.ToLower()) ? "selected" : null)">@typ</option>
+                        }
+                    </select>
+                </div>
+
+                <button type="submit" class="govuk-button govuk-!-margin-top-2" data-module="govuk-button">Apply Filters</button>
+            </form>
+            
+            <!-- Jobs Section -->
+            <div class="jobs-section">
+                <div class="header-section" style="margin-bottom: 5px">
+                    <h4 class="jobs-count">@Model.Count() Jobs Available</h4>
+                    <form method="get" action="@Url.Action("Index", "Jobs")" class="sort-by-form">
+                        <input type="hidden" name="location" value="@ViewData["SelectedLocation"]" />
+                        <input type="hidden" name="department" value="@ViewData["SelectedDepartment"]" />
+                        <input type="hidden" name="status" value="@ViewData["SelectedStatus"]" />
+                        <input type="hidden" name="type" value="@ViewData["SelectedType"]" />
+
+                        <label for="sort" class="govuk-label">Sort by:</label>
+                        <select id="sort" name="sort" class="govuk-select">
+                            @foreach (var sort in new[] { "", "date-asc", "date-desc" })
+                            {
+                            var label = sort == "date-asc" ? "Date (Ascending)"
+                            : sort == "date-desc" ? "Date (Descending)"
+                            : "Select a Sort";
+                            <option value="@sort" selected="@((ViewData["SelectedSort"]?.ToString().ToLower() == sort.ToLower()) ? "selected" : null)">@label</option>
+                            }
+                        </select>
+                        <button type="submit" class="govuk-button govuk-button--secondary" id="applybtn">Apply</button>
+                    </form>
+                </div>
+
+                <main class="govuk-main-wrapper" style="padding: 0">
+                    @if (Model != null && Model.Any())
+                    {
+                    @foreach (var job in Model)
+                    {
+                    <div class="job-card">
+                        <div class="job-card-header">
+                            <!-- Job title and location -->
+                            <div class="job-title-location">
+                                <span class="job-title">
+                                    <a href="/Job/Details/id" class="govuk-link">@job.JobTitle</a>
+                                </span>
+                                <span>-</span>
+                                <span class="job-location">@job.Location.LocationCity</span>
+                            </div>
+                            <div class="job-closing-date">
+                                Closing Date: @job.ClosingDate.ToShortDateString()
+                            </div>
+                        </div>
+                        <div>
+                            <b>Department:</b> @job.Department.DepartmentName
+                        </div>
+                        <div>
+                            <b>Description:</b> @job.JobDescription
+                        </div>
+                    </div>
+                    }
+                    }
+                    else
+                    {
+                    <p>No job roles available.</p>
+                    }
+                </main>
+            </div>
+        </div>
+    </div>
+</div>
