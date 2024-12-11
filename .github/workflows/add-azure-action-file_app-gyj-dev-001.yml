@@ -22,13 +22,10 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
-
-      - name: Move to project directory
-        run: cd src/JobApplicationMVCApp
+        run: dotnet build src/JobApplicationMVCApp/JobApplicationMVCApp.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish src/JobApplicationMVCApp/JobApplicationMVCApp.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
