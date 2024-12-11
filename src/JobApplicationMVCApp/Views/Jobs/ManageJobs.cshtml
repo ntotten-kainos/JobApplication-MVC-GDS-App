@@ -1,153 +1,105 @@
 @model IEnumerable<JobApplicationMVCApp.Models.JobPosting>
 
 <html lang="en">
-<head>
-    <title>Manage Jobs</title>
-    <link rel="stylesheet" href="https://govuk-frontend.herokuapp.com/public/stylesheets/govuk-frontend-3.11.0.min.css">
-    <style>
-        .govuk-table {
-            border-collapse: collapse;
-        }
-        .govuk-table th, .govuk-table td {
-            padding: 15px;
-            border: 1px solid #d3d3d3; 
-        }
-        .govuk-table th {
-            text-align: left; 
-        }
-    </style>
-</head>
-<body class="govuk-template__body">
+@{
+    ViewData["Title"] = "Manage Jobs";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Jobslist.css" asp-append-version="true">
+}
+
 <div class="govuk-width-container">
-    <main class="govuk-main-wrapper">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-full">
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-two-thirds">
-                        <h1 class="govuk-heading-xl">Manage Jobs</h1>
-                    </div>
-                    <div class="govuk-grid-column-one-third" style="text-align: right;">
-                        <button type="submit" class="govuk-button govuk-!-width-three-quarters" data-module="govuk-button" onclick="location.href='@Url.Action("Create", "Jobs")'">
-                            Post a Job
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="govuk-grid-row">
-            <aside class="govuk-grid-column-one-third">
-                <nav class="govuk-navigation">
-                    <ul class="govuk-list">
-                        <li><input type="checkbox" id="filter-created" data-filter="created-by" value="your-username"> Jobs Created by You</li>
-                        <li><input type="checkbox" id="filter-drafts" data-filter="status" value="Draft"> Job Drafts</li>
-                        <li><input type="checkbox" id="filter-closed" data-filter="status" value="Closed"> Closed Jobs</li>
-                    </ul>
-                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    <ul class="govuk-list">
-                        <li><input type="checkbox" id="filter-location" data-filter="location" value="London"> Filter by Location</li>
-                        <li><input type="checkbox" id="filter-department" data-filter="department" value="IT"> Filter by Department</li>
-                        <li><input type="checkbox" id="filter-status" data-filter="status" value="Open"> Filter by Status</li>
-                        <li><input type="checkbox" id="filter-type" data-filter="type" value="Full-Time"> Filter by Job Type</li>
-                    </ul>
-                </nav>
-            </aside>
-            <div class="govuk-grid-column-two-thirds">
-                @if (Model != null)
-                {
-                    <table class="govuk-table">
-                    <thead>
-                        <tr>
-                            <th>@Html.DisplayNameFor(model => model.JobTitle)</th>
-                            <th>@Html.DisplayNameFor(model => model.Location)</th>
-                            <th>@Html.DisplayNameFor(model => model.Department)</th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Status)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="job-list">
-                        @foreach (var item in Model)
+    @Html.ActionLink("Back", "AdminHomepage", "Home", null, new { @class = "govuk-back-link" })
+
+    <div class="container">
+        <h1 class="govuk-heading-l">Manage Jobs</h1>
+        <div class="content-wrapper">
+            <form method="get" action="/Jobs/ManageJobs" class="filters-section">
+                <h2 class="govuk-heading-m">Filter by</h2>
+
+                <input type="hidden" name="sort" value="@ViewData["SelectedSort"]" />
+
+                <div class="govuk-form-group">
+                    <label for="location" class="govuk-label">Location</label>
+                    <select id="location" name="location" class="govuk-select">
+                        @foreach (var loc in (IEnumerable<string>)ViewData["Locations"] ?? Enumerable.Empty<string>())
                         {
-                            <tr data-status="@item.Status" data-location="@item.Location.LocationCity" data-department="@item.Department.DepartmentName" data-type="@item.Type">
-                                <td>@Html.DisplayFor(modelItem => item.JobTitle)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Location.LocationCity)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Department.DepartmentName)</td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Status)
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.JobPostingId">Edit</a> 
-                                </td>
-                            </tr>
+                            <option value="@loc" selected="@((ViewData["SelectedLocation"]?.ToString().ToLower() == loc.ToLower()) ? "selected" : null)">@loc</option>
                         }
-                    </tbody>
-                </table>
+                    </select>
+                </div>
 
-                <nav class="govuk-pagination" role="navigation" aria-label="results">
-                    <ul class="govuk-list govuk-pagination__list">
-                        <li class="govuk-pagination__item govuk-pagination__item--prev">
-                            <a class="govuk-link govuk-pagination__link" href="#">
-                                <span class="govuk-pagination__link-title">Previous</span>
-                            </a>
-                        </li>
-                        <li class="govuk-pagination__item">
-                            <a class="govuk-link govuk-pagination__link" href="#">1</a>
-                        </li>
-                        <li class="govuk-pagination__item">
-                            <a class="govuk-link govuk-pagination__link" href="#">2</a>
-                        </li>
-                        <li class="govuk-pagination__item">
-                            <a class="govuk-link govuk-pagination__link" href="#">3</a>
-                        </li>
-                        <li class="govuk-pagination__item govuk-pagination__item--next">
-                            <a class="govuk-link govuk-pagination__link" href="#">
-                                <span class="govuk-pagination__link-title">Next</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                }
-                else
-                {
-                <p>No job postings found.</p>
-                }
+                <div class="govuk-form-group">
+                    <label for="department" class="govuk-label">Department</label>
+                    <select id="department" name="department" class="govuk-select">
+                        @foreach (var dept in (IEnumerable<string>)ViewData["Departments"] ?? Enumerable.Empty<string>())
+                        {
+                            <option value="@dept" selected="@((ViewData["SelectedDepartment"]?.ToString().ToLower() == dept.ToLower()) ? "selected" : null)">@dept</option>
+
+                        }
+                    </select>
+                </div>
+
+                <div class="govuk-form-group">
+                    <label for="status" class="govuk-label">Status</label>
+                    <select id="status" name="status" class="govuk-select">
+                        @foreach (var stat in (IEnumerable<string>)ViewData["Status"] ?? Enumerable.Empty<string>())
+                        {
+                            <option value="@stat" selected="@((ViewData["SelectedStatus"]?.ToString().ToLower() == stat.ToLower()) ? "selected" : null)">@stat</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="govuk-form-group">
+                    <label for="type" class="govuk-label">Type</label>
+                    <select id="type" name="type" class="govuk-select">
+                        @foreach (var typ in (IEnumerable<string>)ViewData["Type"] ?? Enumerable.Empty<string>())
+                        {
+                            <option value="@typ" selected="@((ViewData["SelectedType"]?.ToString().ToLower() == typ.ToLower()) ? "selected" : null)">@typ</option>
+                        }
+                    </select>
+                </div>
+
+                <button type="submit" class="govuk-button govuk-!-margin-top-2" data-module="govuk-button">Apply Filters</button>
+            </form>
+            
+            <div class="jobs-section">
+                <h4 class="jobs-count">@Model.Count() Jobs Available</h4>
+                <main class="govuk-main-wrapper" style="padding: 0">
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var job in Model)
+                        {
+                            <div class="job-card">
+                                <div class="job-card-header">
+                                    <div class="job-title-location">
+                                        <span class="job-title">
+                                            <a href="/Job/Details/id" class="govuk-link">@job.JobTitle</a>
+                                        </span>
+                                        <span>-</span>
+                                        <span class="job-location">@job.Location.LocationCity</span>
+                                    </div>
+                                    <div class="job-closing-date">
+                                        Closing Date: @job.ClosingDate.ToShortDateString()
+                                    </div>
+                                </div>
+                                <div>
+                                    <b>Department:</b> @job.Department.DepartmentName
+                                </div>
+                                <div>
+                                    <b>Description:</b> @job.JobDescription
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No job roles available.</p>
+                    }
+                </main>
             </div>
         </div>
-    </main>
+    </div>
 </div>
-<script src="https://govuk-frontend.herokuapp.com/public/javascripts/govuk-frontend-3.11.0.min.js"></script>
-<script>
-    document.querySelectorAll('.govuk-checkboxes__input').forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            filterJobs();
-        });
-    });
-
-    function filterJobs() {
-        var rows = document.querySelectorAll('#job-list tr');
-        var filters = {};
-
-        document.querySelectorAll('.govuk-checkboxes__input:checked').forEach(function(checkbox) {
-            var filter = checkbox.getAttribute('data-filter');
-            var value = checkbox.value;
-            if (!filters[filter]) {
-                filters[filter] = [];
-            }
-            filters[filter].push(value);
-        });
-
-        rows.forEach(function(row) {
-            var show = true;
-            for (var filter in filters) {
-                if (filters[filter].indexOf(row.getAttribute('data-' + filter)) === -1) {
-                    show = false;
-                    break;
-                }
-            }
-            row.style.display = show ? '' : 'none';
-        });
-    }
-</script>
-</body>
 </html>

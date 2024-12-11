@@ -168,6 +168,7 @@ namespace JobApplicationMVCApp.Controllers
         public async Task<IActionResult> ManageJobs()
         {
             var applicationDbContext = _context.JobPostings.Include(j => j.Department).Include(j => j.Location);
+  			ViewData["Departments"] = await _context.Departments.Select(d => d.DepartmentName).ToListAsync();
             return View(await applicationDbContext.ToListAsync());
         }
 
