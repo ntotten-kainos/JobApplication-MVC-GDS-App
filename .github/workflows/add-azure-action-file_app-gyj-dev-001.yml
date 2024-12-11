@@ -6,7 +6,6 @@ name: Build and deploy ASP.Net Core app to Azure Web App - app-gyj-dev-001
 on:
   push:
     branches:
-      - main
       - add-azure-action-file
   workflow_dispatch:
 
@@ -23,16 +22,16 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build JobApplicationMVCApp.csproj --configuration Release
+        run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish JobApplicationMVCApp.csproj -c Release -o "${{env.DOTNET_ROOT}}/JobApplicationMVCApp"
+        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/JobApplicationMVCApp
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: windows-latest
