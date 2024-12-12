@@ -1,0 +1,109 @@
+@model JobApplicationMVCApp.Models.JobApplication
+
+@{
+    var jobPosting = Model?.JobPosting;
+    var jobTitle = jobPosting?.JobTitle ?? "Unknown Job Title";
+    var location = jobPosting?.Location?.LocationCity ?? "Unknown Location";
+
+    ViewData["Title"] = $"Apply - {jobTitle} - {location}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="govuk-width-container">
+    <!-- Back Link -->
+    @Html.ActionLink("Back", "Index", "Jobs", null, new { @class = "govuk-back-link" })
+
+    <div class="container">
+        <h1 class="govuk-heading-l">Apply - @jobTitle - @location</h1>
+
+        <!-- Success Popup -->
+        @if (ViewData["SuccessMessage"] != null)
+        {
+            <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" data-module="govuk-notification-banner">
+                <div class="govuk-notification-banner__header">
+                    <h2 class="govuk-notification-banner__title">Success</h2>
+                </div>
+                <div class="govuk-notification-banner__content">
+                    <p class="govuk-body">@ViewData["SuccessMessage"]</p>
+                    <div class="govuk-button-group">
+                        <a href="/Jobs/Details/@Model.JobPostingId" class="govuk-button govuk-button--secondary">View Job Details</a>
+                        <a href="/Jobs/Index" class="govuk-button govuk-button--secondary">Return to Job Listings</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- Error Popup -->
+        @if (ViewData["ErrorMessage"] != null)
+        {
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">There was a problem</h2>
+                <div class="govuk-error-summary__body">
+                    <p class="govuk-body">@ViewData["ErrorMessage"]</p>
+                </div>
+            </div>
+        }
+
+        <!-- Validation Summary -->
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+
+        <!-- Form Section -->
+        <form method="post" class="govuk-form-group">
+            <input type="hidden" name="JobPostingId" value="@Model.JobPostingId" />
+
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="FirstName">First Name</label>
+                <input class="govuk-input" id="FirstName" name="FirstName" type="text" value="@Model.FirstName"/>
+                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "govuk-error-message" })
+            </div>
+
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="LastName">Last Name</label>
+                <input class="govuk-input" id="LastName" name="LastName" type="text" value="@Model.LastName"/>
+                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "govuk-error-message" })
+            </div>
+
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="Address">Address</label>
+                <textarea class="govuk-textarea" id="Address" name="Address">@Model.Address</textarea>
+                @Html.ValidationMessageFor(m => m.Address, "", new { @class = "govuk-error-message" })
+            </div>
+
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="Number">Number (Optional)</label>
+                <input class="govuk-input" id="Number" name="Number" type="number" value="@(Model.Number.HasValue ? Model.Number.ToString() : "")"/>
+                @Html.ValidationMessageFor(m => m.Number, "", new { @class = "govuk-error-message" })
+            </div>
+
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="ApplicationQuestion">Application Question</label>
+                <textarea class="govuk-textarea" id="ApplicationQuestion" name="ApplicationQuestion">@Model.ApplicationQuestion</textarea>
+                @Html.ValidationMessageFor(m => m.ApplicationQuestion, "", new { @class = "govuk-error-message" })
+            </div>
+
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="CVFile">Upload CV (Optional)</label>
+                <input class="govuk-file-upload" id="CVFile" name="CVFile" type="file" accept=".pdf,.doc,.docx"/>
+                @Html.ValidationMessageFor(m => m.CVFile, "", new { @class = "govuk-error-message" })
+            </div>
+            
+            <div class="govuk-form-group">
+                <button type="submit" name="action" value="save" class="govuk-button govuk-button--secondary govuk-!-margin-right-1" data-module="govuk-button">Save as Draft</button>
+                <button type="submit" name="action" value="submit" class="govuk-button" data-module="govuk-button">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

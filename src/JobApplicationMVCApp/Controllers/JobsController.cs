@@ -95,6 +95,78 @@ namespace JobApplicationMVCApp.Controllers
                 return View(await jobs.ToListAsync());
             }
             
+            [HttpGet]
+            public IActionResult Apply(int id)
+            {
+                // Fetch the JobPosting details for the provided ID with Location included
+                var jobPosting = _context.JobPostings
+                    .Include(j => j.Location) // Eagerly load related Location data
+                    .FirstOrDefault(j => j.JobPostingId == id);
+
+                if (jobPosting == null)
+                {
+                    return NotFound();
+                }
+
+                // Initialize the JobApplication model with the JobPostingId
+                var jobApplication = new JobApplication
+                {
+                    JobPostingId = id,
+                    JobPosting = jobPosting
+                };
+
+                return View(jobApplication);
+            }
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Apply(JobApplication model, string action)
+            {
+                if (!ModelState.IsValid)
+                {
+                    var relatedJobPosting = _context.JobPostings
+                        .Include(j => j.Location)
+                        .FirstOrDefault(j => j.JobPostingId == model.JobPostingId);
+
+                    if (relatedJobPosting != null)
+                    {
+                        model.JobPosting = relatedJobPosting;
+                    }
+                    return View(model);
+                }
+
+                try
+                {
+                    if (string.Equals(action, "save", StringComparison.OrdinalIgnoreCase))
+                    {
+                        model.Status = JobApplication.ApplicationStatus.Draft;
+                        ViewData["SuccessMessage"] = "Your application has been saved as a draft.";
+                    }
+                    else if (string.Equals(action, "submit", StringComparison.OrdinalIgnoreCase))
+                    {
+                        model.Status = JobApplication.ApplicationStatus.Submitted;
+                        model.DateSubmitted = DateTime.UtcNow;
+                        ViewData["SuccessMessage"] = "Your application has been successfully submitted.";
+                    }
+
+                    _context.JobApplications.Add(model);
+                    await _context.SaveChangesAsync();
+
+                    // Reload the job posting to pass to the view
+                    model.JobPosting = _context.JobPostings
+                        .Include(j => j.Location)
+                        .FirstOrDefault(j => j.JobPostingId == model.JobPostingId);
+
+                    return View(model);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error saving application: {ex.Message}");
+                    ViewData["ErrorMessage"] = "An error occurred while processing your application.";
+                    return View(model);
+                }
+            }
+
         // // GET: Jobs/Details/5
         // public async Task<IActionResult> Details(int? id)
         // {
