@@ -119,14 +119,15 @@
                                     </div>
                                 <div class="govuk-grid-column-one-quarter" style="text-align: right;">
                                     <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
+                                            style="width: 80px; display: flex; justify-content: center; align-items: center;"
                                             onclick="location.href='@Url.Action("Edit", "Jobs", new { id = job.JobPostingId })'">Edit</button>
                                    
                                     <!-- Conditional Delete Button -->
                                     @if (job.Status == JobPosting.JobStatus.Draft)
                                     {
                                     <form method="post" action="@Url.Action("Delete", "Jobs", new { id = job.JobPostingId })" style="display: inline;">
-                                        <button type="submit" class="govuk-button govuk-button--warning govuk-!-margin-bottom-0"
-                                                data-module="govuk-button">
+                                        <button type="submit" class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0"
+                                                style="width: 80px; display: flex; justify-content: center; align-items: center;"data-module="govuk-button">
                                             Delete
                                         </button>
                                     </form>
