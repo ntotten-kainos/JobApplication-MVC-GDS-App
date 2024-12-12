@@ -165,75 +165,73 @@ namespace JobApplicationMVCApp.Controllers
             ViewData["JobLocationId"] = new SelectList(_context.Locations, "LocationId", "LocationCity", jobPosting.JobLocationId);
             return View(jobPosting);
         }
-       public async Task<IActionResult> ManageJobs(string location, string department, string status, string type, string sort)
-{
-    // Populate filter dropdowns
-    ViewData["Departments"] = await _context.Departments.Select(d => d.DepartmentName).ToListAsync();
-    ViewData["Locations"] = await _context.Locations.Select(l => l.LocationCity).ToListAsync();
-    ViewData["Status"] = Enum.GetNames(typeof(JobPosting.JobStatus));
-    ViewData["Type"] = Enum.GetNames(typeof(JobPosting.JobType));
 
-    // Fetch all jobs with necessary includes
-    var jobs = _context.JobPostings
-        .Include(j => j.Location)
-        .Include(j => j.Department)
-        .AsQueryable();
-
-    // Apply filters
-    if (!string.IsNullOrWhiteSpace(location) && location != "All")
-    {
-        jobs = jobs.Where(j => j.Location.LocationCity.ToLower().Equals(location.ToLower()));
-        ViewData["SelectedLocation"] = location;
-    }
-
-    if (!string.IsNullOrWhiteSpace(department)&& department != "All")
-    {
-        jobs = jobs.Where(j => j.Department.DepartmentName.ToLower().Equals(department.ToLower()));
-        ViewData["SelectedDepartment"] = department;
-    }
-
-    if (!string.IsNullOrWhiteSpace(status) && status != "All")
-    {
-         if (Enum.TryParse(status, out JobPosting.JobStatus parsedStatus))
-         {
-            jobs = jobs.Where(j => j.Status == parsedStatus);
-         }
-        ViewData["SelectedStatus"] = status;
-    }
-
-    if (!string.IsNullOrWhiteSpace(type) && type != "All")
-    {
-         if (Enum.TryParse(status, out JobPosting.JobType parsedType))
-         {
-            jobs = jobs.Where(j => j.Type == parsedType);
-         }
-        ViewData["SelectedType"] = type;
-    }
-
-    // Apply sorting (optional, e.g., by Closing Date)
-    if (!string.IsNullOrWhiteSpace(sort))
-    {
-        if (sort.Equals("closingdate", StringComparison.OrdinalIgnoreCase))
+        public async Task<IActionResult> ManageJobs(string location, string department, string status, string type, string sort)
         {
-            jobs = jobs.OrderBy(j => j.ClosingDate);
-        }
-        ViewData["SelectedSort"] = sort;
-    }
-if (!string.IsNullOrWhiteSpace(sort))
-    {
-        if (sort.Equals("closingdate", StringComparison.OrdinalIgnoreCase))
-        {
-            jobs = jobs.OrderBy(j => j.ClosingDate);
-        }
-        ViewData["SelectedSort"] = sort;
-    }
+            // Populate filter dropdowns
+            ViewData["Departments"] = await _context.Departments.Select(d => d.DepartmentName).ToListAsync();
+            ViewData["Locations"] = await _context.Locations.Select(l => l.LocationCity).ToListAsync();
+            ViewData["Status"] = Enum.GetNames(typeof(JobPosting.JobStatus));
+            ViewData["Type"] = Enum.GetNames(typeof(JobPosting.JobType));
 
-    // Return the filtered and sorted job list to the view
-    return View(await jobs.ToListAsync());
-}
+            // Fetch all jobs with necessary includes
+            var jobs = _context.JobPostings
+            .Include(j => j.Location)
+            .Include(j => j.Department)
+            .AsQueryable();
 
-       
+            // Apply filters
+            if (!string.IsNullOrWhiteSpace(location) && location != "All")
+            {
+                jobs = jobs.Where(j => j.Location.LocationCity.ToLower().Equals(location.ToLower()));
+                ViewData["SelectedLocation"] = location;
+            }
 
+            if (!string.IsNullOrWhiteSpace(department)&& department != "All")
+            {
+                jobs = jobs.Where(j => j.Department.DepartmentName.ToLower().Equals(department.ToLower()));
+                ViewData["SelectedDepartment"] = department;
+            }
+
+            if (!string.IsNullOrWhiteSpace(status) && status != "All")
+            {
+                if (Enum.TryParse(status, out JobPosting.JobStatus parsedStatus))
+                {
+                    jobs = jobs.Where(j => j.Status == parsedStatus);
+                }
+                ViewData["SelectedStatus"] = status;
+            }
+
+            if (!string.IsNullOrWhiteSpace(type) && type != "All")
+            {
+                if (Enum.TryParse(type, out JobPosting.JobType parsedType))
+                {
+                    jobs = jobs.Where(j => j.Type == parsedType);
+                }
+                ViewData["SelectedType"] = type;
+            }
+
+            // Apply sorting (optional, e.g., by Closing Date)
+            if (!string.IsNullOrWhiteSpace(sort))
+            {
+                if (sort.Equals("closingdate", StringComparison.OrdinalIgnoreCase))
+                {
+                    jobs = jobs.OrderBy(j => j.ClosingDate);
+                }
+                ViewData["SelectedSort"] = sort;
+            }
+            if (!string.IsNullOrWhiteSpace(sort))
+            {
+                if (sort.Equals("closingdate", StringComparison.OrdinalIgnoreCase))
+                {
+                    jobs = jobs.OrderBy(j => j.ClosingDate);
+                }
+                ViewData["SelectedSort"] = sort;
+            }
+
+            // Return the filtered and sorted job list to the view
+            return View(await jobs.ToListAsync());
+        }       
 
         // // GET: Jobs/Edit/5
         // public async Task<IActionResult> Edit(int? id)

@@ -95,25 +95,43 @@
                         {
                             @foreach (var job in Model)
                             {
-                                <div class="job-card">
-                                    <div class="job-card-header">
-                                        <div class="job-title-location">
-                                            <span class="job-title">
-                                                <a href="/Job/Details/id" class="govuk-link">@job.JobTitle</a>
-                                            </span>
-                                            <span>-</span>
-                                            <span class="job-location">@job.Location.LocationCity</span>
+                                <div class="job-card govuk-grid-row" style="align-items: center;">
+                                    <div class="govuk-grid-column-three-quarters">
+                                        <div class="job-card-header">
+                                            <div class="job-title-location">
+                                                <span class="job-title">
+                                                    <span>JobID </span><span class="job-posting-id">@job.JobPostingId</span><span> - </span>
+                                                    <a href="/Job/Details/id" class="govuk-link">@job.JobTitle</a>
+                                                </span>
+                                                <span>-</span>
+                                                <span class="job-location">@job.Location.LocationCity</span>
+                                            </div>
                                         </div>
-                                        <div class="job-closing-date">
-                                            Closing Date: @job.ClosingDate.ToShortDateString()
+                                        <div>
+                                            <b>Department:</b> @job.Department.DepartmentName
+                                        </div>
+                                        <div>
+                                            <b>Description:</b> @job.JobDescription
+                                        </div>
+                                        <div>
+                                            <b>Status:</b> @job.Status
                                         </div>
                                     </div>
-                                    <div>
-                                        <b>Department:</b> @job.Department.DepartmentName
-                                    </div>
-                                    <div>
-                                        <b>Description:</b> @job.JobDescription
-                                    </div>
+                                <div class="govuk-grid-column-one-quarter" style="text-align: right;">
+                                    <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
+                                            onclick="location.href='@Url.Action("Edit", "Jobs", new { id = job.JobPostingId })'">Edit</button>
+                                   
+                                    <!-- Conditional Delete Button -->
+                                    @if (job.Status == JobPosting.JobStatus.Draft)
+                                    {
+                                    <form method="post" action="@Url.Action("Delete", "Jobs", new { id = job.JobPostingId })" style="display: inline;">
+                                        <button type="submit" class="govuk-button govuk-button--warning govuk-!-margin-bottom-0"
+                                                data-module="govuk-button">
+                                            Delete
+                                        </button>
+                                    </form>
+                                    }
+                                </div>
                                 </div>
                             }
                         }
