@@ -24,10 +24,10 @@ namespace JobApplicationMVCApp.Models
         [Required(ErrorMessage = "Address is required.")]
         [StringLength(200, MinimumLength = 1, ErrorMessage = "Please enter an address between 1-200 characters.")]
         public string Address { get; set; } = null!;
-
-        // Not a mandatory field, but must be an integer if provided
-        [Range(int.MinValue, int.MaxValue, ErrorMessage = "Number must be a valid integer.")]
-        public int? Number { get; set; }
+        
+        [Display(Name = "Number (Optional)")]
+        [StringLength(15, ErrorMessage = "Number cannot exceed 15 digits.")]
+        public string? Number { get; set; }
 
         [Required(ErrorMessage = "Application Question is required.")]
         [StringLength(500, MinimumLength = 1, ErrorMessage = "Please enter your response between 1-500 characters.")]

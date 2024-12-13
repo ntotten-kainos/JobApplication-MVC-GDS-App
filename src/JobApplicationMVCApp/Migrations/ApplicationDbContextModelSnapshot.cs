@@ -77,8 +77,9 @@ namespace JobApplicationMVCApp.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<int?>("Number")
-                        .HasColumnType("int");
+                    b.Property<string>("Number")
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -170,8 +171,8 @@ namespace JobApplicationMVCApp.Migrations
 
                     b.Property<string>("LocationPostCode")
                         .IsRequired()
-                        .HasMaxLength(7)
-                        .HasColumnType("varchar(7)");
+                        .HasMaxLength(8)
+                        .HasColumnType("varchar(8)");
 
                     b.Property<string>("LocationStreetAddress")
                         .IsRequired()
