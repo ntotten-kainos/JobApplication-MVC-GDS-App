@@ -23,7 +23,7 @@ namespace JobApplicationMVCApp.Models
         public string LocationCity { get; set; }
         
         [Required(ErrorMessage = "Post Code is required.")]
-        [StringLength(7, ErrorMessage = "Post Code cannot be longer than 7 characters.")]
+        [StringLength(8, ErrorMessage = "Post Code cannot be longer than 8 characters.")]
         public string LocationPostCode { get; set; }
         
         [Required(ErrorMessage = "Country is required.")]
