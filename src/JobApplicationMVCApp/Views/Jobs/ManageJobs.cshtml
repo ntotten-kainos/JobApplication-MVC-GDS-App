@@ -1,0 +1,149 @@
+@model IEnumerable<JobApplicationMVCApp.Models.JobPosting>
+
+<html lang="en">
+@{
+    ViewData["Title"] = "Manage Jobs";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Jobslist.css" asp-append-version="true">
+}
+
+<div class="govuk-width-container">
+    @Html.ActionLink("Back", "AdminHomepage", "Home", null, new { @class = "govuk-back-link" })
+
+    <div class="container">
+        <!-- Header Section -->
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <h1 class="govuk-heading-l">Manage Jobs</h1>
+            </div>
+            <div class="govuk-grid-column-one-third" style="text-align: right;">
+                <button type="submit" class="govuk-button govuk-!-width-three-quarters" data-module="govuk-button" onclick="location.href='@Url.Action("Create", "Jobs")'">
+                    Post a Job
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="govuk-grid-row">
+            <!-- Filters Section -->
+            <div class="govuk-grid-column-one-third">
+                <form method="get" action="/Jobs/ManageJobs" class="filters-section govuk-!-margin-top-3">
+                    <h2 class="govuk-heading-m">Filter by</h2>
+
+                    <input type="hidden" name="sort" value="@ViewData["SelectedSort"]"/>
+
+                    <div class="govuk-form-group">
+                        <label for="location" class="govuk-label">Location</label>
+                        <select id="location" name="location" class="govuk-select">
+                            <option value="">All</option>
+                            @foreach (var loc in (IEnumerable<string>)ViewData["Locations"] ?? Enumerable.Empty<string>())
+                            {
+                                <option value="@loc" selected="@((ViewData["SelectedLocation"]?.ToString().ToLower() == loc.ToLower()) ? "selected" : null)">@loc</option>
+                            }
+                        }
+                    </select>
+                    </div>
+
+                    <div class="govuk-form-group">
+                        <label for="department" class="govuk-label">Department</label>
+                        <select id="department" name="department" class="govuk-select">
+                            <option value="">All</option>
+                            @foreach (var dept in (IEnumerable<string>)ViewData["Departments"] ?? Enumerable.Empty<string>())
+                            {
+                                <option value="@dept" selected="@((ViewData["SelectedDepartment"]?.ToString().ToLower() == dept.ToLower()) ? "selected" : null)">@dept</option>
+                            }
+                        }
+                    </select>
+                    </div>
+
+                    <div class="govuk-form-group">
+                        <label for="status" class="govuk-label">Status</label>
+                        <select id="status" name="status" class="govuk-select">
+                            <option value="">All</option>
+                            @foreach (var stat in (IEnumerable<string>)ViewData["Status"] ?? Enumerable.Empty<string>())
+                            {
+                                <option value="@stat" selected="@((ViewData["SelectedStatus"]?.ToString().ToLower() == stat.ToLower()) ? "selected" : null)">@stat</option>
+                            }
+                        }
+                    </select>
+                    </div>
+
+                    <div class="govuk-form-group">
+                        <label for="type" class="govuk-label">Type</label>
+                        <select id="type" name="type" class="govuk-select">
+                            <option value="">All</option>
+                            @foreach (var typ in (IEnumerable<string>)ViewData["Type"] ?? Enumerable.Empty<string>())
+                            {
+                                <option value="@typ" selected="@((ViewData["SelectedType"]?.ToString().ToLower() == typ.ToLower()) ? "selected" : null)">@typ</option>
+                            }
+                        }
+                    </select>
+                    </div>
+
+                    <button type="submit" class="govuk-button govuk-!-margin-top-2" data-module="govuk-button">Apply Filters</button>
+                </form>
+            </div>
+
+            <!-- Jobs Section -->
+            <div class="govuk-grid-column-two-thirds">
+                <div class="jobs-section">
+                    <h4 class="jobs-count">@Model.Count() Jobs Available</h4>
+                    <main class="govuk-main-wrapper" style="padding: 0">
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var job in Model)
+                            {
+                                <div class="job-card govuk-grid-row" style="align-items: center;">
+                                    <div class="govuk-grid-column-three-quarters">
+                                        <div class="job-card-header">
+                                            <div class="job-title-location">
+                                                <span class="job-title">
+                                                    <span>JobID </span><span class="job-posting-id">@job.JobPostingId</span><span> - </span>
+                                                    <a href="/Job/Details/id" class="govuk-link">@job.JobTitle</a>
+                                                </span>
+                                                <span>-</span>
+                                                <span class="job-location">@job.Location.LocationCity</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <b>Department:</b> @job.Department.DepartmentName
+                                        </div>
+                                        <div>
+                                            <b>Description:</b> @job.JobDescription
+                                        </div>
+                                        <div>
+                                            <b>Status:</b> @job.Status
+                                        </div>
+                                    </div>
+                                <div class="govuk-grid-column-one-quarter" style="text-align: right;">
+                                    <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
+                                            style="width: 80px; display: flex; justify-content: center; align-items: center;"
+                                            onclick="location.href='@Url.Action("Edit", "Jobs", new { id = job.JobPostingId })'">Edit</button>
+                                   
+                                    <!-- Conditional Delete Button -->
+                                    @if (job.Status == JobPosting.JobStatus.Draft)
+                                    {
+                                    <form method="post" action="@Url.Action("Delete", "Jobs", new { id = job.JobPostingId })" style="display: inline;">
+                                        <button type="submit" class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0"
+                                                style="width: 80px; display: flex; justify-content: center; align-items: center;"data-module="govuk-button">
+                                            Delete
+                                        </button>
+                                    </form>
+                                    }
+                                </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p>No job roles available.</p>
+                        }
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

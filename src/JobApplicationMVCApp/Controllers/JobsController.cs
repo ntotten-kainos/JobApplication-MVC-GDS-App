@@ -95,6 +95,78 @@ namespace JobApplicationMVCApp.Controllers
                 return View(await jobs.ToListAsync());
             }
             
+            [HttpGet]
+            public IActionResult Apply(int id)
+            {
+                // Fetch the JobPosting details for the provided ID with Location included
+                var jobPosting = _context.JobPostings
+                    .Include(j => j.Location) // Eagerly load related Location data
+                    .FirstOrDefault(j => j.JobPostingId == id);
+
+                if (jobPosting == null)
+                {
+                    return NotFound();
+                }
+
+                // Initialize the JobApplication model with the JobPostingId
+                var jobApplication = new JobApplication
+                {
+                    JobPostingId = id,
+                    JobPosting = jobPosting
+                };
+
+                return View(jobApplication);
+            }
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Apply(JobApplication model, string action)
+            {
+                if (!ModelState.IsValid)
+                {
+                    var relatedJobPosting = _context.JobPostings
+                        .Include(j => j.Location)
+                        .FirstOrDefault(j => j.JobPostingId == model.JobPostingId);
+
+                    if (relatedJobPosting != null)
+                    {
+                        model.JobPosting = relatedJobPosting;
+                    }
+                    return View(model);
+                }
+
+                try
+                {
+                    if (string.Equals(action, "save", StringComparison.OrdinalIgnoreCase))
+                    {
+                        model.Status = JobApplication.ApplicationStatus.Draft;
+                        ViewData["SuccessMessage"] = "Your application has been saved as a draft.";
+                    }
+                    else if (string.Equals(action, "submit", StringComparison.OrdinalIgnoreCase))
+                    {
+                        model.Status = JobApplication.ApplicationStatus.Submitted;
+                        model.DateSubmitted = DateTime.UtcNow;
+                        ViewData["SuccessMessage"] = "Your application has been successfully submitted.";
+                    }
+
+                    _context.JobApplications.Add(model);
+                    await _context.SaveChangesAsync();
+
+                    // Reload the job posting to pass to the view
+                    model.JobPosting = _context.JobPostings
+                        .Include(j => j.Location)
+                        .FirstOrDefault(j => j.JobPostingId == model.JobPostingId);
+
+                    return View(model);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error saving application: {ex.Message}");
+                    ViewData["ErrorMessage"] = "An error occurred while processing your application.";
+                    return View(model);
+                }
+            }
+
         // // GET: Jobs/Details/5
         // public async Task<IActionResult> Details(int? id)
         // {
@@ -165,6 +237,73 @@ namespace JobApplicationMVCApp.Controllers
             ViewData["JobLocationId"] = new SelectList(_context.Locations, "LocationId", "LocationCity", jobPosting.JobLocationId);
             return View(jobPosting);
         }
+
+        public async Task<IActionResult> ManageJobs(string location, string department, string status, string type, string sort)
+        {
+            // Populate filter dropdowns
+            ViewData["Departments"] = await _context.Departments.Select(d => d.DepartmentName).ToListAsync();
+            ViewData["Locations"] = await _context.Locations.Select(l => l.LocationCity).ToListAsync();
+            ViewData["Status"] = Enum.GetNames(typeof(JobPosting.JobStatus));
+            ViewData["Type"] = Enum.GetNames(typeof(JobPosting.JobType));
+
+            // Fetch all jobs with necessary includes
+            var jobs = _context.JobPostings
+            .Include(j => j.Location)
+            .Include(j => j.Department)
+            .AsQueryable();
+
+            // Apply filters
+            if (!string.IsNullOrWhiteSpace(location) && location != "All")
+            {
+                jobs = jobs.Where(j => j.Location.LocationCity.ToLower().Equals(location.ToLower()));
+                ViewData["SelectedLocation"] = location;
+            }
+
+            if (!string.IsNullOrWhiteSpace(department)&& department != "All")
+            {
+                jobs = jobs.Where(j => j.Department.DepartmentName.ToLower().Equals(department.ToLower()));
+                ViewData["SelectedDepartment"] = department;
+            }
+
+            if (!string.IsNullOrWhiteSpace(status) && status != "All")
+            {
+                if (Enum.TryParse(status, out JobPosting.JobStatus parsedStatus))
+                {
+                    jobs = jobs.Where(j => j.Status == parsedStatus);
+                }
+                ViewData["SelectedStatus"] = status;
+            }
+
+            if (!string.IsNullOrWhiteSpace(type) && type != "All")
+            {
+                if (Enum.TryParse(type, out JobPosting.JobType parsedType))
+                {
+                    jobs = jobs.Where(j => j.Type == parsedType);
+                }
+                ViewData["SelectedType"] = type;
+            }
+
+            // Apply sorting (optional, e.g., by Closing Date)
+            if (!string.IsNullOrWhiteSpace(sort))
+            {
+                if (sort.Equals("closingdate", StringComparison.OrdinalIgnoreCase))
+                {
+                    jobs = jobs.OrderBy(j => j.ClosingDate);
+                }
+                ViewData["SelectedSort"] = sort;
+            }
+            if (!string.IsNullOrWhiteSpace(sort))
+            {
+                if (sort.Equals("closingdate", StringComparison.OrdinalIgnoreCase))
+                {
+                    jobs = jobs.OrderBy(j => j.ClosingDate);
+                }
+                ViewData["SelectedSort"] = sort;
+            }
+
+            // Return the filtered and sorted job list to the view
+            return View(await jobs.ToListAsync());
+        }       
 
         // // GET: Jobs/Edit/5
         // public async Task<IActionResult> Edit(int? id)
