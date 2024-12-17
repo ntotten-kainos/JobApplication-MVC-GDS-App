@@ -40,6 +40,57 @@ namespace JobApplicationMVCApp.Migrations
                     b.ToTable("Departments");
                 });
 
+            modelBuilder.Entity("JobApplicationMVCApp.Models.JobApplication", b =>
+                {
+                    b.Property<int>("ApplicationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ApplicationId"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("ApplicationQuestion")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateSubmitted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("JobPostingId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Number")
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("ApplicationId");
+
+                    b.HasIndex("JobPostingId");
+
+                    b.ToTable("JobApplications");
+                });
+
             modelBuilder.Entity("JobApplicationMVCApp.Models.JobPosting", b =>
                 {
                     b.Property<int>("JobPostingId")
@@ -120,8 +171,8 @@ namespace JobApplicationMVCApp.Migrations
 
                     b.Property<string>("LocationPostCode")
                         .IsRequired()
-                        .HasMaxLength(7)
-                        .HasColumnType("varchar(7)");
+                        .HasMaxLength(8)
+                        .HasColumnType("varchar(8)");
 
                     b.Property<string>("LocationStreetAddress")
                         .IsRequired()
@@ -331,6 +382,17 @@ namespace JobApplicationMVCApp.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("JobApplicationMVCApp.Models.JobApplication", b =>
+                {
+                    b.HasOne("JobApplicationMVCApp.Models.JobPosting", "JobPosting")
+                        .WithMany()
+                        .HasForeignKey("JobPostingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JobPosting");
                 });
 
             modelBuilder.Entity("JobApplicationMVCApp.Models.JobPosting", b =>
