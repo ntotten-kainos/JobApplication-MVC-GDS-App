@@ -167,25 +167,25 @@ namespace JobApplicationMVCApp.Controllers
                 }
             }
 
-        // // GET: Jobs/Details/5
-        // public async Task<IActionResult> Details(int? id)
-        // {
-        //     if (id == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     var jobPosting = await _context.JobPostings
-        //         .Include(j => j.Department)
-        //         .Include(j => j.Location)
-        //         .FirstOrDefaultAsync(m => m.JobPostingId == id);
-        //     if (jobPosting == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return View(jobPosting);
-        // }
+            // GET: Jobs/JobDescription/5
+            public async Task<IActionResult> JobDescription(int? id)
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
+        
+                var jobPosting = await _context.JobPostings
+                    .Include(j => j.Department)
+                    .Include(j => j.Location)
+                    .FirstOrDefaultAsync(m => m.JobPostingId == id);
+                if (jobPosting == null)
+                {
+                    return NotFound();
+                }
+        
+                return View(jobPosting);
+            }
 
         // GET: Jobs/Create
         public IActionResult Create()

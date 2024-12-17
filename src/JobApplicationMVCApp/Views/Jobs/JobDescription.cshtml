@@ -1,0 +1,65 @@
+@model JobApplicationMVCApp.Models.JobPosting
+
+@{
+    ViewData["Title"] = "Job Description";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="govuk-heading-l" style="display: inline-block; ">@Html.DisplayFor(model => model.JobTitle)</h1>
+
+<a href="#" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button" style = "float: right;">
+    Apply
+    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false" >
+        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
+    </svg>
+</a>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" >
+
+<div>
+    <dl class="row">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-quarter" style="background-color: #f3f2f1;">
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.Department)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Department.DepartmentName)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.Location)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.Location.LocationCity)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.Salary)
+                </dt>
+                <dd class="col-sm-10">
+                    £@Model.Salary?.ToString("#,##0")
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.ClosingDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ClosingDate.Date)
+                </dd>
+            </div>
+            <div class="govuk-grid-column-three-quarters">
+                <dd class="col-sm-10">
+                    <h4>Description</h4>
+                    @Html.DisplayFor(model => model.JobDescription)
+                </dd>
+                <br/>
+                <dd class="col-sm-10">
+                    <h4>Requirements</h4>
+                    @Html.DisplayFor(model => model.JobRequirements)
+                </dd>
+            </div>
+        </div>
+        
+    </dl>
+</div>
+
+@Html.ActionLink("Back", "Index", "Jobs", null, new { @class = "govuk-back-link" })
+
