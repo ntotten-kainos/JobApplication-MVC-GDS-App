@@ -36,13 +36,13 @@
                     @Html.DisplayNameFor(model => model.Salary)
                 </dt>
                 <dd class="col-sm-10">
-                    £@Model.Salary?.ToString("#,##0")
+                    @(Model.Salary.HasValue ? "£" + Model.Salary.Value.ToString("N0") : "£0") 
                 </dd>
                 <dt class = "col-sm-2">
                     @Html.DisplayNameFor(model => model.ClosingDate)
                 </dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.ClosingDate.Date)
+                    @Model.ClosingDate.ToString("dd/MM/yyyy")
                 </dd>
             </div>
             <div class="govuk-grid-column-three-quarters">
