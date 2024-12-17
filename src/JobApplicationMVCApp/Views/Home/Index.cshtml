@@ -35,7 +35,7 @@
           role="button" 
           aria-label="Start now" 
           data-module="govuk-button"
-          href="@Url.Action("Login", "Account")">
+          href="@Url.Page("/Account/Login", new { area = "Identity" })">
           <span>Start now</span>
           <svg class="govuk-button__start-icon govuk-!-display-none-print" 
                xmlns="http://www.w3.org/2000/svg" 
