@@ -2,6 +2,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages; // For PageModel
 using Microsoft.AspNetCore.Identity;      // For IdentityUser, SignInManager, UserManager
 using System.ComponentModel.DataAnnotations; // For Required, DataType, and EmailAddress attributes
 using Microsoft.AspNetCore.Mvc;           // For IActionResult
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 public class LoginModel : PageModel
 {
