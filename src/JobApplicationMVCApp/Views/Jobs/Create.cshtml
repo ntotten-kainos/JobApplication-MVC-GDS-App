@@ -5,25 +5,31 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<!-- Back Button -->
+<a href="@(Context.Request.Query["returnUrl"].ToString() ?? Url.Action("AdminHomepage", "Home"))" class="govuk-back-link">
+    Back
+</a>
 
-<h4>Job Posting</h4>
+<h1>Post a Job</h1>
+
 <hr />
-<div>
-    @Html.ActionLink("Back", "AdminHomepage", "Home", null, new { @class = "govuk-back-link" })
 
+<!-- Form to Create Job -->
+<div>
     <div class="govuk-grid-row">
         <form asp-action="Create">
+            <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
             <div class="govuk-grid-column-three-quarters">
                 <div class="govuk-form-group">
                     <label asp-for="JobTitle" class="govuk-label">Job Title</label>
-                    <input asp-for="JobTitle" class="govuk-input"/>
+                    <input asp-for="JobTitle" class="govuk-input" />
                     <span asp-validation-for="JobTitle" class="text-danger"></span>
                 </div>
                 <div class="govuk-form-group">
                     <label asp-for="JobDescription" class="govuk-label">Description</label>
-                    <textarea asp-for="JobDescription" class="govuk-input" ></textarea>
+                    <textarea asp-for="JobDescription" class="govuk-input"></textarea>
                     <span asp-validation-for="JobDescription" class="text-danger"></span>
                 </div>
                 <div class="govuk-form-group">
@@ -43,50 +49,38 @@
                 </div>
                 <div class="govuk-form-group">
                     <label asp-for="Salary" class="govuk-label">Salary</label>
-                    <input asp-for="Salary" class="govuk-input"/>
+                    <input asp-for="Salary" class="govuk-input" />
                     <span asp-validation-for="Salary" class="text-danger"></span>
                 </div>
                 <div class="govuk-form-group">
                     <label asp-for="ClosingDate" class="govuk-label">Closing Date</label>
-                    <input asp-for="ClosingDate" class="govuk-input"/>
+                    <input asp-for="ClosingDate" class="govuk-input" />
                     <span asp-validation-for="ClosingDate" class="text-danger"></span>
                 </div>
                 <div class="govuk-form-group">
                     <label asp-for="Type" class="govuk-label">Job Type</label>
-
-                    @Html.DropDownList("Type",
-                        Html.GetEnumSelectList<JobPosting.JobType>(),
-                        "Select Job Type", new { @class = "govuk-input" })
-
+                    @Html.DropDownList("Type", Html.GetEnumSelectList<JobPosting.JobType>(), "Select Job Type", new { @class = "govuk-input" })
                     <span asp-validation-for="Type" class="text-danger"></span>
                 </div>
                 <div class="govuk-form-group">
                     <label asp-for="Status" class="govuk-label">Status</label>
-
-                    @Html.DropDownList("Status",
-                        Html.GetEnumSelectList<JobPosting.JobStatus>(),
-                        "Select Job Status", new { @class = "govuk-input" })
-
+                    @Html.DropDownList("Status", Html.GetEnumSelectList<JobPosting.JobStatus>(), "Select Job Status", new { @class = "govuk-input" })
                     <span asp-validation-for="Status" class="text-danger"></span>
                 </div>
-                @* <div class="govuk-form-group"> *@
-                @*     <label asp-for="DatePosted" class="govuk-label"></label> *@
-                @*     <input asp-for="DatePosted" class="govuk-input" /> *@
-                @*     <span asp-validation-for="DatePosted" class="text-danger"></span> *@
-                @* </div> *@
+
+                <!-- Submit Button -->
                 <div class="govuk-form-group">
                     <button type="submit" name="action" value="Create" class="govuk-button govuk-!-width-one-quarter">Submit</button>
                 </div>
             </div>
+
             <div class="govuk-grid-column-one-quarter">
                 <button type="submit" name="action" value="Draft" class="govuk-button govuk-button--secondary govuk-!-width-full" disabled>Save as draft</button>
                 <button type="submit" name="action" value="Delete" class="govuk-button govuk-button--warning govuk-!-width-full" disabled>Delete draft</button>
             </div>
+
+            <!-- Hidden Field to Pass returnUrl for Form Submission -->
+            <input type="hidden" name="returnUrl" value="@Context.Request.Query["returnUrl"]" />
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index" class="govuk-link">Go to List</a>
-</div>
-
