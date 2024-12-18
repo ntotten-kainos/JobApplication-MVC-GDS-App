@@ -187,16 +187,12 @@ namespace JobApplicationMVCApp.Controllers
                 return View(jobPosting);
             }
 
-        // GET: Jobs/Create
+        // GET: Jobs/Create 
         public IActionResult Create(string returnUrl)
         {
             ViewData["JobDepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentName");
             ViewData["JobLocationId"] = new SelectList(_context.Locations, "LocationId", "LocationCity");
-            if (string.IsNullOrEmpty(returnUrl))
-            {
-                returnUrl = Request.Headers["Referer"].ToString() ?? Url.Action("ManageJobs", "Jobs");
-            }
-            ViewBag.ReturnUrl = returnUrl;
+
             return View();
         }
 

@@ -19,7 +19,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             <!-- Left Column -->
             <div class="govuk-grid-column-one-third govuk-!-text-align-center">
                 <h2 class="govuk-heading-m">Quick Actions</h2>
-                <button class="govuk-button govuk-!-width-full" data-module="govuk-button" onclick="location.href='/Jobs/Create'">
+                <button class="govuk-button govuk-!-width-full" data-module="govuk-button" onclick="location.href='@Url.Action("Create", "Jobs", new { returnUrl = Context.Request.Path })'">
                     Post a Job
                 </button>
                 <br/><br/>
