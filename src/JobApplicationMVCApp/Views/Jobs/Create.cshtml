@@ -4,14 +4,14 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<a href="@(Context.Request.Query["returnUrl"].ToString() ?? Url.Action("AdminHomepage", "Home"))" class="govuk-back-link">
-    Back
-</a>
-<h1>Post a Job</h1>
 
+<h1>Create</h1>
 
+<h4>Job Posting</h4>
 <hr />
 <div>
+    @Html.ActionLink("Back", "AdminHomepage", "Home", null, new { @class = "govuk-back-link" })
+
     <div class="govuk-grid-row">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -53,20 +53,20 @@
                 </div>
                 <div class="govuk-form-group">
                     <label asp-for="Type" class="govuk-label">Job Type</label>
-                    
+
                     @Html.DropDownList("Type",
                         Html.GetEnumSelectList<JobPosting.JobType>(),
-                        "Select Job Type",new { @class = "govuk-input" })
-                    
+                        "Select Job Type", new { @class = "govuk-input" })
+
                     <span asp-validation-for="Type" class="text-danger"></span>
                 </div>
                 <div class="govuk-form-group">
                     <label asp-for="Status" class="govuk-label">Status</label>
-                    
+
                     @Html.DropDownList("Status",
                         Html.GetEnumSelectList<JobPosting.JobStatus>(),
                         "Select Job Status", new { @class = "govuk-input" })
-                    
+
                     <span asp-validation-for="Status" class="text-danger"></span>
                 </div>
                 @* <div class="govuk-form-group"> *@
@@ -86,4 +86,7 @@
     </div>
 </div>
 
+<div>
+    <a asp-action="Index" class="govuk-link">Go to List</a>
+</div>
 
