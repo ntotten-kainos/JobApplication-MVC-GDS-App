@@ -1,0 +1,93 @@
+@model JobApplicationMVCApp.Models.JobPosting
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="govuk-grid-row">
+    <!-- Left Column: Job Title, Description, and Requirements -->
+    <div class="govuk-grid-column-two-thirds">
+        <!-- Back Button at the Top -->
+        <div style="text-align: left; display: flex; gap: 10px; margin-bottom: 1rem;">
+            @Html.ActionLink("Back", "ManageJobs", "Jobs", null, new { @class = "govuk-back-link" })
+        </div>
+        <div style="margin-left: 1rem;">
+        <div class="govuk-!-margin-bottom-6">
+            <h2 class="govuk-heading-m">Job ID - @Model.JobPostingId</h2>
+            <h1 class="govuk-heading-l">@Model.JobTitle</h1>
+        </div>
+
+        <!-- Job Description -->
+        <div class="govuk-!-margin-bottom-6">
+            <h2 class="govuk-heading-m">@Html.DisplayNameFor(model => model.JobDescription)</h2>
+            <p class="govuk-body">@Html.DisplayFor(model => model.JobDescription)</p>
+        </div>
+
+        <!-- Job Requirements -->
+        <div class="govuk-!-margin-bottom-6">
+            <h2 class="govuk-heading-m">@Html.DisplayNameFor(model => model.JobRequirements)</h2>
+            <p class="govuk-body">@Html.DisplayFor(model => model.JobRequirements)</p>
+        </div>
+
+        <div class="govuk-!-margin-bottom-6">
+            <div>
+                <h2 class="govuk-heading-m">@Html.DisplayNameFor(model => model.DatePosted)</h2>
+                <p class="govuk-body">@Model.DatePosted.ToString("dd/MM/yyyy")</p>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Sidebar (Summary List) -->
+    <div class="govuk-grid-column-one-third">
+        <!-- Edit and Delete Buttons at the Top of the Sidebar -->
+        <div style="text-align: right; display: flex; gap: 10px; margin-bottom: 1rem;">
+            <!-- Edit Button -->
+            <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
+                    style="width: 80px; justify-content: center; align-items: center;"
+                    onclick="location.href='@Url.Action("Edit", "Jobs", new { id = @Model.JobPostingId })'">
+                Edit
+            </button>
+
+            <!-- Conditional Delete Button -->
+            @if (Model.Status == JobPosting.JobStatus.Draft)
+            {
+                <form method="post" action="@Url.Action("Delete", "Jobs", new { id = Model.JobPostingId })" style="margin: 0;">
+                    <button type="submit" class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0"
+                            style="width: 80px; justify-content: center; align-items: center;" data-module="govuk-button">
+                        Delete
+                    </button>
+                </form>
+            }
+        </div>
+
+        <dl class="govuk-summary-list">
+            <div style="margin-right: 1rem">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">@Html.DisplayNameFor(model => model.Status)</dt>
+                    <dd class="govuk-summary-list__value">@Html.DisplayFor(model => model.Status)</dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">@Html.DisplayNameFor(model => model.Department)</dt>
+                    <dd class="govuk-summary-list__value">@Html.DisplayFor(model => model.Department.DepartmentName)</dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">@Html.DisplayNameFor(model => model.Location)</dt>
+                    <dd class="govuk-summary-list__value">@Html.DisplayFor(model => model.Location.LocationCity)</dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">@Html.DisplayNameFor(model => model.Salary)</dt>
+                    <dd class="govuk-summary-list__value">@(Model.Salary.HasValue ? "£" + Model.Salary.Value.ToString("N0") : "£0")</dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">@Html.DisplayNameFor(model => model.ClosingDate)</dt>
+                    <dd class="govuk-summary-list__value">@Model.ClosingDate.ToString("dd/MM/yyyy")</dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">@Html.DisplayNameFor(model => model.Type)</dt>
+                    <dd class="govuk-summary-list__value">@Html.DisplayFor(model => model.Type)</dd>
+                </div>
+            </div>
+        </dl>
+    </div>
+</div>
