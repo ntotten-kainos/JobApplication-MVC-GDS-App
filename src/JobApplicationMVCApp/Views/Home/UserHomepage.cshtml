@@ -1,0 +1,95 @@
+@{
+    ViewData["Title"] = "User Homepage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="govuk-width-container">
+    <!-- Description of Website -->
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+        <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-4">
+            <h1 class="govuk-heading-xl">Welcome to the Job Dashboard</h1>
+            <p class="govuk-body">
+                Find your next career opportunity. We offer a wide range of jobs across various locations and departments. 
+                Whether you’re looking for full-time, part-time, or flexible work, our portal connects you with employers nationwide.
+            </p>
+            
+            <!-- Register/Login/Sign Out depending on user state -->
+            <div class="govuk-grid-row govuk-!-margin-top-6 govuk">
+                <div class="govuk-grid-column-full govuk-!-text-align-center">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <!-- If user is logged in -->
+                        <p class="govuk-body govuk-!-text-align-center">
+                            Welcome back, <strong>@User.Identity.Name</strong>!
+                        </p>
+                        <!-- Sign Out button (ensure you have the proper logout action configured) -->
+                    <form method="post" asp-area="Identity" asp-page="/Account/Logout">
+                        <button type="submit" class="govuk-button govuk-!-margin-right-3">Sign Out</button>
+                    </form>
+
+                    }
+                    else
+                    {
+                        <!-- If user is NOT logged in -->
+                        <a href="/Identity/Account/Register" class="govuk-button govuk-!-margin-right-3">Register</a>
+                        <a href="/Identity/Account/Login" class="govuk-button govuk-button--secondary govuk-!-margin-right-3">Login</a>
+                            <p class="govuk-body-s">
+                              You do not have to log in to view available jobs, but you must log in before applying.
+                            </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Job Search Bar -->
+    <div class="govuk-grid-row govuk-!-margin-bottom-9">
+        <div class="govuk-grid-column-two-thirds govuk-!-margin-left-auto govuk-!-margin-right-auto">
+            <form method="get" action="/Jobs/Index">
+                <label for="search" class="govuk-heading-l" style="margin-bottom: 10px">Search for jobs</label><br/>
+                <div style="display: flex; gap: 0.5rem">
+                    <input class="govuk-input govuk-!-width-three-quarters" id="search" name="keywords" type="text" placeholder="e.g. software engineer" />
+                    <button type="submit" class="govuk-button" data-module="govuk-button">Search</button>
+                </div>
+            </form>
+            <p class="govuk-body">
+                Alternatively, 
+                <a href="/Jobs/Index" class="govuk-link">View all Jobs.</a>
+            </p>
+        </div>
+    </div>
+    
+    <!-- Links to View Jobs by Location -->
+    <div class="govuk-grid-row govuk-!-margin-bottom-9">
+        <div class="govuk-grid-column-full govuk-!-text-align-center">
+            <h2 class="govuk-heading-l">Explore Jobs by Popular Locations</h2>
+            <p class="govuk-body" style="font-size: 1.1rem">
+                <a href="/Jobs/Index?location=London" class="govuk-link">London</a> |
+                <a href="/Jobs/Index?location=Birmingham" class="govuk-link">Birmingham</a> |
+                <a href="/Jobs/Index?location=Manchester" class="govuk-link">Manchester</a> |
+                <a href="/Jobs/Index?location=Edinburgh" class="govuk-link">Edinburgh</a> |
+                <a href="/Jobs/Index?location=Belfast" class="govuk-link">Belfast</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Recently Added & Closing Soon -->
+    <section class="govuk-!-margin-bottom-9">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-half govuk-!-margin-bottom-6">
+                <h2 class="govuk-heading-l">Recently Added Jobs</h2>
+                <p class="govuk-body">
+                    Check out the newest roles posted to our portal. <br>
+                    <a href="/Jobs/Index?sort=date-desc" class="govuk-link">View recently added jobs</a>.
+                </p>
+            </div>
+            <div class="govuk-grid-column-one-half govuk-!-margin-bottom-6">
+                <h2 class="govuk-heading-l">Jobs Closing Soon</h2>
+                <p class="govuk-body">
+                    Don’t miss out – these opportunities are ending soon.
+                    <a href="/Jobs/Index?status=Open&sort=date-asc" class="govuk-link">View jobs closing soon</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+</div>
