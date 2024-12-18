@@ -104,7 +104,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                             <!-- Job title and location -->
                             <div class="job-title-location">
                                 <span class="job-title">
-                                    <a href="/Job/Details/id" class="govuk-link">@job.JobTitle</a>
+                                    @Html.ActionLink(@job.JobTitle, "JobDescription", "Jobs", new { id=job.JobPostingId }, new { @class = "govuk-link" })
                                 </span>
                                 <span>-</span>
                                 <span class="job-location">@job.Location.LocationCity</span>
