@@ -4,10 +4,12 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<a href="@(Context.Request.Query["returnUrl"].ToString() ?? Url.Action("AdminHomepage", "Home"))" class="govuk-back-link">
+    Back
+</a>
+<h1>Post a Job</h1>
 
-<h1>Create</h1>
 
-<h4>Job Posting</h4>
 <hr />
 <div>
     <div class="govuk-grid-row">
@@ -84,7 +86,4 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index" class="govuk-link">Back to List</a>
-</div>
 

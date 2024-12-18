@@ -19,7 +19,9 @@
                 <h1 class="govuk-heading-l">Manage Jobs</h1>
             </div>
             <div class="govuk-grid-column-one-third" style="text-align: right;">
-                <button type="submit" class="govuk-button govuk-!-width-three-quarters" data-module="govuk-button" onclick="location.href='@Url.Action("Create", "Jobs")'">
+                <button type="button" class="govuk-button govuk-!-width-three-quarters"
+                        data-module="govuk-button"
+                        onclick="window.location.href='@Url.Action("Create", "Jobs", new { returnUrl = ViewContext.HttpContext.Request.Path })'">
                     Post a Job
                 </button>
             </div>
