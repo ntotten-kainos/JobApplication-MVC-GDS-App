@@ -109,3 +109,16 @@ npm install -g editorconfig-checker
 ```bash
 editorconfig-checker 
 ```
+
+# Adding credentials for seeded/default users
+Add the following lines to your environment variable config of choice, e.g. your `.zshrc`:
+
+```bash
+export GYJ_ADMIN_PASSWORD="<your password here>"
+export GYJ_APPLICANT_PASSWORD="<your password here>"
+export GYJ_RECRUITER_PASSWORD="<your password here>"
+```
+
+and save/reload as needed.
+The program will pick up these environment variables on start-up and seed the database with users with the correct roles if they do not already exist.
+
