@@ -23,16 +23,6 @@ public class HomeController : Controller
     {
         return View();
     }
-    
-    public IActionResult AdminHomepage()
-    {
-        return View();
-    }
-
-    public IActionResult ManageRoles()
-    {
-        return View();
-    }
 
     public IActionResult UserHomepage()
     {
