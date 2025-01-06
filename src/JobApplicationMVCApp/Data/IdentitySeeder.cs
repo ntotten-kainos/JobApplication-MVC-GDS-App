@@ -26,7 +26,7 @@ namespace JobApplicationMVCApp.Data
     
             // add a default admin for testing
             var adminEmail = "admin@gmail.com";
-            var adminPassword = "JobAppAdmin!1234";
+            var adminPassword = Environment.GetEnvironmentVariable("GYJ_ADMIN_PASSWORD");
             if (await userManager.FindByEmailAsync(adminEmail) == null)
             {
                 var adminUser = new ApplicationUser() { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
@@ -44,7 +44,7 @@ namespace JobApplicationMVCApp.Data
     
             // add a default admin for testing
             var userEmail = "default@gmail.com";
-            var userPassword = "JobAppDefault!1234";
+            var userPassword = Environment.GetEnvironmentVariable("GYJ_APPLICANT_PASSWORD");
             if (await userManager.FindByEmailAsync(userEmail) == null)
             {
                 var defaultUser = new ApplicationUser() { UserName = userEmail, Email = userEmail, EmailConfirmed = true };
@@ -62,7 +62,7 @@ namespace JobApplicationMVCApp.Data
     
             // add a default admin for testing
             var userEmail = "recruiter@gmail.com";
-            var userPassword = "JobAppRecruiter!1234";
+            var userPassword = Environment.GetEnvironmentVariable("GYJ_RECRUITER_PASSWORD");
             if (await userManager.FindByEmailAsync(userEmail) == null)
             {
                 var recruiterUser = new ApplicationUser() { UserName = userEmail, Email = userEmail, EmailConfirmed = true };
