@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JobApplicationMVCApp.Data;
 using JobApplicationMVCApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JobApplicationMVCApp.Controllers
 {
@@ -20,6 +21,7 @@ namespace JobApplicationMVCApp.Controllers
         }
 
             // GET: Jobs
+            [AllowAnonymous]
             public async Task<IActionResult> Index(string location, string department, string status, string type, string sort)
             {
                 // Set default values to "All" if parameters are null
@@ -96,6 +98,7 @@ namespace JobApplicationMVCApp.Controllers
             }
             
             [HttpGet]
+            [Authorize(Roles = "Admin, Recruiter, Applicant")]
             public IActionResult Apply(int id)
             {
                 // Fetch the JobPosting details for the provided ID with Location included
@@ -120,6 +123,7 @@ namespace JobApplicationMVCApp.Controllers
 
             [HttpPost]
             [ValidateAntiForgeryToken]
+            [Authorize(Roles = "Admin, Recruiter, Applicant")]
             public async Task<IActionResult> Apply(JobApplication model, string action)
             {
                 if (!ModelState.IsValid)
@@ -168,6 +172,7 @@ namespace JobApplicationMVCApp.Controllers
             }
 
             // GET: Jobs/JobDescription/5
+            [Authorize(Roles = "Admin, Recruiter, Applicant")]
             public async Task<IActionResult> JobDescription(int? id)
             {
                 if (id == null)
@@ -187,7 +192,8 @@ namespace JobApplicationMVCApp.Controllers
                 return View(jobPosting);
             }
 
-        // GET: Jobs/Create 
+        // GET: Jobs/Create
+        [Authorize(Roles = "Admin, Recruiter")]
         public IActionResult Create(string returnUrl)
         {
             ViewData["JobDepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentName");
@@ -201,6 +207,7 @@ namespace JobApplicationMVCApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> Create([Bind("JobPostingId,JobTitle,JobDescription,JobRequirements,JobLocationId,JobDepartmentId,Salary,ClosingDate,Type,Status,DatePosted")] JobPosting jobPosting, string action)
         {
             jobPosting.DatePosted = DateTime.Now;
@@ -238,6 +245,7 @@ namespace JobApplicationMVCApp.Controllers
             return View(jobPosting);
         }
 
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> ManageJobs(string location, string department, string status, string type, string sort)
         {
             // Populate filter dropdowns
@@ -305,6 +313,7 @@ namespace JobApplicationMVCApp.Controllers
             return View(await jobs.ToListAsync());
         }       
 
+        [Authorize(Roles = "Admin, Recruiter, Applicant")]
         public async Task<IActionResult> ViewJob(int? id)
         {
             if (id == null)

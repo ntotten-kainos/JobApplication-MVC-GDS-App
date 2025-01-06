@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using JobApplicationMVCApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
 namespace JobApplicationMVCApp.Controllers;
@@ -14,16 +15,19 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+    [AllowAnonymous]
     public IActionResult Index()
     {
         return View();
     }
 
+    [AllowAnonymous]
     public IActionResult Privacy()
     {
         return View();
     }
 
+    [Authorize(Roles = "Admin, Recruiter, Applicant")]
     public IActionResult UserHomepage()
     {
         return View();
