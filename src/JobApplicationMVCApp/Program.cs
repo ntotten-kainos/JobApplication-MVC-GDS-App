@@ -33,11 +33,12 @@ using (var serviceScope = app.Services.CreateScope())
         await IdentitySeeder.SeedRoles(services);
         await IdentitySeeder.SeedDefaultUser(services);
         await IdentitySeeder.SeedAdminUser(services);
+        await IdentitySeeder.SeedRecruiterUser(services);
     }
     catch (Exception e)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(e, "An error occurred while seeding the admin user.");
+        logger.LogError(e, "An error occurred while seeding the database.");
     }
 }
 

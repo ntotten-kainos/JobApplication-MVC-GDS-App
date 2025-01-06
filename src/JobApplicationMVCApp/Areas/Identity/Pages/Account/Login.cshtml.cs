@@ -55,6 +55,10 @@ public class LoginModel : PageModel
                 {
                     return LocalRedirect("~/Admin/AdminHomepage");
                 }
+                else if (await _userManager.IsInRoleAsync(user, "Recruiter"))
+                {
+                    return LocalRedirect("~/Recruiter/RecruiterHomepage");
+                }
                 else
                 {
                     return LocalRedirect("~/Home/UserHomepage");
