@@ -4,6 +4,5 @@ namespace JobApplicationMVCApp.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        
     }
 }
