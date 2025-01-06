@@ -25,6 +25,22 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+    try
+    {
+        await IdentitySeeder.SeedRoles(services);
+        await IdentitySeeder.SeedDefaultUser(services);
+        await IdentitySeeder.SeedAdminUser(services);
+    }
+    catch (Exception e)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(e, "An error occurred while seeding the admin user.");
+    }
+}
+
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {

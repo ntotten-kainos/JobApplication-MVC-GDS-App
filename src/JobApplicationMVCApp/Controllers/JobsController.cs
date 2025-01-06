@@ -94,7 +94,7 @@ namespace JobApplicationMVCApp.Controllers
             }
             
             [HttpGet]
-            [Authorize(Roles = "Admin, Recruiter, Applicant")]
+            [Authorize(Roles = "Admin, Recruiter, User")]
             public IActionResult Apply(int id)
             {
                 // Fetch the JobPosting details for the provided ID with Location included
@@ -119,7 +119,7 @@ namespace JobApplicationMVCApp.Controllers
 
             [HttpPost]
             [ValidateAntiForgeryToken]
-            [Authorize(Roles = "Admin, Recruiter, Applicant")]
+            [Authorize(Roles = "Admin, Recruiter, User")]
             public async Task<IActionResult> Apply(JobApplication model, string action)
             {
                 if (!ModelState.IsValid)
@@ -168,7 +168,7 @@ namespace JobApplicationMVCApp.Controllers
             }
 
             // GET: Jobs/JobDescription/5
-            [Authorize(Roles = "Admin, Recruiter, Applicant")]
+            [Authorize(Roles = "Admin, Recruiter, User")]
             public async Task<IActionResult> JobDescription(int? id)
             {
                 if (id == null)
@@ -309,7 +309,7 @@ namespace JobApplicationMVCApp.Controllers
             return View(await jobs.ToListAsync());
         }       
 
-        [Authorize(Roles = "Admin, Recruiter, Applicant")]
+        [Authorize(Roles = "Admin, Recruiter, User")]
         public async Task<IActionResult> ViewJob(int? id)
         {
             if (id == null)
