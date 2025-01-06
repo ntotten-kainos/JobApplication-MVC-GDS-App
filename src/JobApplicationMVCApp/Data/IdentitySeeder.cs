@@ -54,7 +54,24 @@ namespace JobApplicationMVCApp.Data
                     await userManager.AddToRoleAsync(defaultUser, "User");
                 }
             }
-            
+        }
+        
+        public static async Task SeedRecruiterUser(IServiceProvider serviceProvider)
+        {
+            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    
+            // add a default admin for testing
+            var userEmail = "recruiter@gmail.com";
+            var userPassword = "JobAppRecruiter!1234";
+            if (await userManager.FindByEmailAsync(userEmail) == null)
+            {
+                var recruiterUser = new ApplicationUser() { UserName = userEmail, Email = userEmail, EmailConfirmed = true };
+                var result = await userManager.CreateAsync(recruiterUser, userPassword);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(recruiterUser, "Recruiter");
+                }
+            }
         }
     }
 }
