@@ -11,7 +11,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
 
 <div class="govuk-width-container">
     <!-- Back Link -->
-    @Html.ActionLink("Back", "AdminHomepage", "Home", null, new { @class = "govuk-back-link" })
+    @Html.ActionLink("Back", "UserHomepage", "Home", null, new { @class = "govuk-back-link" })
 
     <div class="container">
         <h1 class="govuk-heading-l">View Job Roles</h1>
@@ -27,7 +27,8 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                 <div class="govuk-form-group">
                     <label for="location" class="govuk-label">Location</label>
                     <select id="location" name="location" class="govuk-select">
-                        @foreach (var loc in new[] { "All", "London", "Birmingham", "Manchester", "Edinburgh", "Derry/Londonderry", "Bristol" })
+                        <option value="">All</option>
+                        @foreach (var loc in (IEnumerable<string>)ViewData["Locations"] ?? Enumerable.Empty<string>())
                         {
                         <option value="@loc" selected="@((ViewData["SelectedLocation"]?.ToString().ToLower() == loc.ToLower()) ? "selected" : null)">@loc</option>
                         }
@@ -38,7 +39,8 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                 <div class="govuk-form-group">
                     <label for="department" class="govuk-label">Department</label>
                     <select id="department" name="department" class="govuk-select">
-                        @foreach (var dept in new[] { "All", "IT", "HR", "Finance" })
+                        <option value="">All</option>
+                        @foreach (var dept in (IEnumerable<string>)ViewData["Departments"] ?? Enumerable.Empty<string>())
                         {
                         <option value="@dept" selected="@((ViewData["SelectedDepartment"]?.ToString().ToLower() == dept.ToLower()) ? "selected" : null)">@dept</option>
                         }
@@ -48,11 +50,12 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                 <!-- Status Dropdown -->
                 <div class="govuk-form-group">
                     <label for="status" class="govuk-label">Status</label>
-                    <select id="status" name="status" class="govuk-select">
-                        @foreach (var stat in new[] { "All", "Open", "Closed" })
-                        {
-                        <option value="@stat" selected="@((ViewData["SelectedStatus"]?.ToString().ToLower() == stat.ToLower()) ? "selected" : null)">@stat</option>
-                        }
+                        <select id="status" name="status" class="govuk-select">
+                            <option value="">All</option>
+                            @foreach (var stat in (IEnumerable<string>)ViewData["Status"] ?? Enumerable.Empty<string>())
+                            {
+                            <option value="@stat" selected="@((ViewData["SelectedStatus"]?.ToString().ToLower() == stat.ToLower()) ? "selected" : null)">@stat</option>
+                            }
                     </select>
                 </div>
 
@@ -60,10 +63,11 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                 <div class="govuk-form-group">
                     <label for="type" class="govuk-label">Type</label>
                     <select id="type" name="type" class="govuk-select">
-                        @foreach (var typ in new[] { "All", "Full-time", "Part-time" })
-                        {
-                        <option value="@typ" selected="@((ViewData["SelectedType"]?.ToString().ToLower() == typ.ToLower()) ? "selected" : null)">@typ</option>
-                        }
+                    <option value="">All</option>
+                    @foreach (var typ in (IEnumerable<string>)ViewData["Type"] ?? Enumerable.Empty<string>())
+                    {
+                    <option value="@typ" selected="@((ViewData["SelectedType"]?.ToString().ToLower() == typ.ToLower()) ? "selected" : null)">@typ</option>
+                    }
                     </select>
                 </div>
 
@@ -99,27 +103,33 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                     {
                     @foreach (var job in Model)
                     {
-                    <div class="job-card">
-                        <div class="job-card-header">
-                            <!-- Job title and location -->
-                            <div class="job-title-location">
+                    <div class="job-card govuk-grid-row" style="align-items: center;">
+                        <div class="govuk-grid-column-three-quarters">
+                            <div class="job-card-header">
+                                <!-- Job title and location -->
+                                <div class="job-title-location">
                                 <span class="job-title">
                                     @Html.ActionLink(@job.JobTitle, "JobDescription", "Jobs", new { id=job.JobPostingId }, new { @class = "govuk-link" })
                                 </span>
-                                <span>-</span>
-                                <span class="job-location">@job.Location.LocationCity</span>
+                                    <span>-</span>
+                                    <span class="job-location">@job.Location.LocationCity</span>
+                                </div>
+                                <div class="job-closing-date">
+                                    Closing Date: @job.ClosingDate.ToShortDateString()
+                                </div>
                             </div>
-                            <div class="job-closing-date">
-                                Closing Date: @job.ClosingDate.ToShortDateString()
+                            <div>
+                                <b>Department:</b> @job.Department.DepartmentName
                             </div>
-                        </div>
-                        <div>
-                            <b>Department:</b> @job.Department.DepartmentName
-                        </div>
-                        <div>
-                            <b>Description:</b> @job.JobDescription
+                            <div>
+                                <b>Description:</b> @job.JobDescription
+                            </div>
+                            <div>
+                                <b>Type:</b> @job.Type
+                            </div>
                         </div>
                     </div>
+           
                     }
                     }
                     else

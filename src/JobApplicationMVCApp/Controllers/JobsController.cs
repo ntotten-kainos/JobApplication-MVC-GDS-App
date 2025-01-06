@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JobApplicationMVCApp.Data;
 using JobApplicationMVCApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JobApplicationMVCApp.Controllers
 {
@@ -20,61 +21,64 @@ namespace JobApplicationMVCApp.Controllers
         }
 
             // GET: Jobs
+            [AllowAnonymous]
             public async Task<IActionResult> Index(string location, string department, string status, string type, string sort)
             {
-                // Set default values to "All" if parameters are null
-                location = string.IsNullOrEmpty(location) ? "All" : location;
-                department = string.IsNullOrEmpty(department) ? "All" : department;
-                status = string.IsNullOrEmpty(status) ? "All" : status;
-                type = string.IsNullOrEmpty(type) ? "All" : type;
-
-                // Normalize filter inputs for comparison
-                location = location.ToLower();
-                department = department.ToLower();
-                status = status.ToLower();
-                type = type.ToLower();
-
-                // Start with all job postings, including related tables
+                // Populate filter dropdowns
+                ViewData["Departments"] = await _context.Departments.Select(d => d.DepartmentName).ToListAsync();
+                ViewData["Locations"] = await _context.Locations.Select(l => l.LocationCity).ToListAsync();
+                ViewData["Status"] = Enum.GetNames(typeof(JobPosting.JobStatus))
+                    .Where(status => status == nameof(JobPosting.JobStatus.Open) || status == nameof(JobPosting.JobStatus.Closed))
+                    .ToArray();;
+                ViewData["Type"] = Enum.GetNames(typeof(JobPosting.JobType));
+                
+                // Fetch all jobs with necessary includes
                 var jobs = _context.JobPostings
                     .Include(j => j.Location)
                     .Include(j => j.Department)
                     .AsQueryable();
-
-                // Apply filters if not "All"
-                if (location != "all")
+                
+                // Apply filters
+                if (!string.IsNullOrWhiteSpace(location) && location != "All")
                 {
-                    jobs = jobs.Where(j => j.Location != null && (j.Location.LocationName.ToLower() == location || j.Location.LocationCity.ToLower() == location || j.Location.LocationPostCode.ToLower() == location));
+                    jobs = jobs.Where(j => j.Location.LocationCity.ToLower().Equals(location.ToLower()));
+                    ViewData["SelectedLocation"] = location;
                 }
 
-                if (department != "all")
+                if (!string.IsNullOrWhiteSpace(department)&& department != "All")
                 {
-                    jobs = jobs.Where(j => j.Department != null && j.Department.DepartmentName.ToLower() == department); 
+                    jobs = jobs.Where(j => j.Department.DepartmentName.ToLower().Equals(department.ToLower()));
+                    ViewData["SelectedDepartment"] = department;
                 }
 
-                if (status != "all")
+                if (!string.IsNullOrWhiteSpace(status) && status != "All")
                 {
-                    if (Enum.TryParse<JobPosting.JobStatus>(status, true, out var parsedStatus))
+                    if (Enum.TryParse(status, out JobPosting.JobStatus parsedStatus))
                     {
                         jobs = jobs.Where(j => j.Status == parsedStatus);
                     }
+                    ViewData["SelectedStatus"] = status;
                 }
 
-                if (type != "all")
+                if (!string.IsNullOrWhiteSpace(type) && type != "All")
                 {
-                    var typeMappings = new Dictionary<string, JobPosting.JobType>(StringComparer.OrdinalIgnoreCase)
-                    {
-                        { "full-time", JobPosting.JobType.FullTime },
-                        { "part-time", JobPosting.JobType.PartTime },
-                        { "contract", JobPosting.JobType.Contract },
-                        { "internship", JobPosting.JobType.Internship }
-                    };
-
-                    if (typeMappings.TryGetValue(type, out var parsedType))
+                    if (Enum.TryParse(type, out JobPosting.JobType parsedType))
                     {
                         jobs = jobs.Where(j => j.Type == parsedType);
-                    } 
-                }
+                    }
 
+                    ViewData["SelectedType"] = type;
+                }
+                
+                // Apply sorting (optional, e.g., by Closing Date)
+                if (!string.IsNullOrWhiteSpace(sort))
+                {
+                    if (sort.Equals("closingdate", StringComparison.OrdinalIgnoreCase))
+                    {
+                        jobs = jobs.OrderBy(j => j.ClosingDate);
+                    }
+                    ViewData["SelectedSort"] = sort;
+                }
                 // Apply sorting
                 jobs = sort switch
                 {
@@ -85,17 +89,12 @@ namespace JobApplicationMVCApp.Controllers
                     _ => jobs
                 };
 
-                // Pass selected values to the view
-                ViewData["SelectedLocation"] = location;
-                ViewData["SelectedDepartment"] = department;
-                ViewData["SelectedStatus"] = status;
-                ViewData["SelectedType"] = type;
-                ViewData["SelectedSort"] = sort;
-
+                // Return the filtered and sorted job list to the view
                 return View(await jobs.ToListAsync());
             }
             
             [HttpGet]
+            [Authorize(Roles = "Admin, Recruiter, User")]
             public IActionResult Apply(int id)
             {
                 // Fetch the JobPosting details for the provided ID with Location included
@@ -120,6 +119,7 @@ namespace JobApplicationMVCApp.Controllers
 
             [HttpPost]
             [ValidateAntiForgeryToken]
+            [Authorize(Roles = "Admin, Recruiter, User")]
             public async Task<IActionResult> Apply(JobApplication model, string action)
             {
                 if (!ModelState.IsValid)
@@ -168,6 +168,7 @@ namespace JobApplicationMVCApp.Controllers
             }
 
             // GET: Jobs/JobDescription/5
+            [Authorize(Roles = "Admin, Recruiter, User")]
             public async Task<IActionResult> JobDescription(int? id)
             {
                 if (id == null)
@@ -188,11 +189,12 @@ namespace JobApplicationMVCApp.Controllers
             }
 
         // GET: Jobs/Create
-        public IActionResult Create()
+        [Authorize(Roles = "Admin, Recruiter")]
+        public IActionResult Create(string returnUrl)
         {
             ViewData["JobDepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentName");
             ViewData["JobLocationId"] = new SelectList(_context.Locations, "LocationId", "LocationCity");
-            
+
             return View();
         }
 
@@ -201,6 +203,7 @@ namespace JobApplicationMVCApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> Create([Bind("JobPostingId,JobTitle,JobDescription,JobRequirements,JobLocationId,JobDepartmentId,Salary,ClosingDate,Type,Status,DatePosted")] JobPosting jobPosting, string action)
         {
             jobPosting.DatePosted = DateTime.Now;
@@ -238,6 +241,7 @@ namespace JobApplicationMVCApp.Controllers
             return View(jobPosting);
         }
 
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> ManageJobs(string location, string department, string status, string type, string sort)
         {
             // Populate filter dropdowns
@@ -305,6 +309,7 @@ namespace JobApplicationMVCApp.Controllers
             return View(await jobs.ToListAsync());
         }       
 
+        [Authorize(Roles = "Admin, Recruiter, User")]
         public async Task<IActionResult> ViewJob(int? id)
         {
             if (id == null)

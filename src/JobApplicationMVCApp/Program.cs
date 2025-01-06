@@ -2,41 +2,55 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using JobApplicationMVCApp.Data;
 using JobApplicationMVCApp.Models;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add Database Context
 builder.Services.AddDbContext<ApplicationDbContext>();
-
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+// Add Identity and Roles
+builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+    options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>() // Enable roles like "Admin" or "User"
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// TODO 
-// Figure out how what changes are needed to register custom identity - or if we even need it.
-// Default works for now. 
 
-// builder.Services.AddIdentity<ApplicationUser, IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
+// Add Exception Filters for Development
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+// Add MVC Controllers with Views
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+    try
+    {
+        await IdentitySeeder.SeedRoles(services);
+        await IdentitySeeder.SeedDefaultUser(services);
+        await IdentitySeeder.SeedAdminUser(services);
+        await IdentitySeeder.SeedRecruiterUser(services);
+    }
+    catch (Exception e)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(e, "An error occurred while seeding the database.");
+    }
+}
+
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+    app.UseMigrationsEndPoint(); // Show detailed error pages for database migrations
 }
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseHsts(); // Enforce HTTP Strict Transport Security
 }
 
 app.UseHttpsRedirection();
@@ -44,11 +58,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication(); // Make sure authentication middleware is registered
+app.UseAuthorization();  // Authorization middleware
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
+
+app.MapRazorPages(); // Map Razor Pages for Identity UI
 
 app.Run();

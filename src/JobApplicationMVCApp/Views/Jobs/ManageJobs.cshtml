@@ -10,7 +10,7 @@
 }
 
 <div class="govuk-width-container">
-    @Html.ActionLink("Back", "AdminHomepage", "Home", null, new { @class = "govuk-back-link" })
+    @Html.ActionLink("Back", "AdminHomepage", "Admin", null, new { @class = "govuk-back-link" })
 
     <div class="container">
         <!-- Header Section -->
@@ -19,7 +19,9 @@
                 <h1 class="govuk-heading-l">Manage Jobs</h1>
             </div>
             <div class="govuk-grid-column-one-third" style="text-align: right;">
-                <button type="submit" class="govuk-button govuk-!-width-three-quarters" data-module="govuk-button" onclick="location.href='@Url.Action("Create", "Jobs")'">
+                <button type="button" class="govuk-button govuk-!-width-three-quarters"
+                        data-module="govuk-button"
+                        onclick="window.location.href='@Url.Action("Create", "Jobs", new { returnUrl = ViewContext.HttpContext.Request.Path })'">
                     Post a Job
                 </button>
             </div>
@@ -100,7 +102,7 @@
                                         <div class="job-card-header">
                                             <div class="job-title-location">
                                                 <span class="job-title">
-                                                    <span>JobID </span><span class="job-posting-id">@job.JobPostingId</span><span> - </span>
+                                            <span>JobID </span><span class="job-posting-id">@job.JobPostingId</span><span> - </span>
                                                     <a href="/Jobs/ViewJob/@job.JobPostingId" class="govuk-link">@job.JobTitle</a>
                                                 </span>
                                                 <span>-</span>
@@ -117,29 +119,29 @@
                                             <b>Status:</b> @job.Status
                                         </div>
                                     </div>
-                                <div class="govuk-grid-column-one-quarter" style="text-align: right;">
-                                    <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
-                                            style="width: 80px; display: flex; justify-content: center; align-items: center;"
-                                            onclick="location.href='@Url.Action("Edit", "Jobs", new { id = job.JobPostingId })'">Edit</button>
-                                   
-                                    <!-- Conditional Delete Button -->
-                                    @if (job.Status == JobPosting.JobStatus.Draft)
-                                    {
-                                    <form method="post" action="@Url.Action("Delete", "Jobs", new { id = job.JobPostingId })" style="display: inline;">
-                                        <button type="submit" class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0"
-                                                style="width: 80px; display: flex; justify-content: center; align-items: center;"data-module="govuk-button">
-                                            Delete
-                                        </button>
-                                    </form>
-                                    }
+                                    <div class="govuk-grid-column-one-quarter" style="text-align: right;">
+                                        <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
+                                                style="width: 80px; display: flex; justify-content: center; align-items: center;"
+                                                onclick="location.href='@Url.Action("Edit", "Jobs", new { id = job.JobPostingId })'">Edit</button>
+
+                                        <!-- Conditional Delete Button -->
+                                        @if (job.Status == JobPosting.JobStatus.Draft)
+                                        {
+                                        <form method="post" action="@Url.Action("Delete", "Jobs", new { id = job.JobPostingId })" style="display: inline;">
+                                            <button type="submit" class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0"
+                                                    style="width: 80px; display: flex; justify-content: center; align-items: center;"data-module="govuk-button">
+                                                Delete
+                                            </button>
+                                        </form>
+                                        }
+                                    </div>
                                 </div>
-                                </div>
-                            }
+                        }
                         }
                         else
                         {
-                            <p>No job roles available.</p>
-                        }
+                        <p>No job roles available.</p>
+                        }        
                     </main>
                 </div>
             </div>
