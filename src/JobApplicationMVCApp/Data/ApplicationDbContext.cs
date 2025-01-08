@@ -13,19 +13,34 @@ public class ApplicationDbContext : IdentityDbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var host = Environment.GetEnvironmentVariable("DB_HOST");
-        var name = Environment.GetEnvironmentVariable("DB_NAME");
-        var username = Environment.GetEnvironmentVariable("DB_USERNAME");
-        var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
-        var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "3306"; // Default MySQL port
+        var mySqlConnString = string.Empty;
+        var isLocal = bool.Parse(Environment.GetEnvironmentVariable("IS_LOCAL") ?? "false");
 
-        if (string.IsNullOrEmpty(host) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+        if (isLocal)
         {
-            throw new InvalidOperationException("Database configuration environment variables are missing.");
+            var host = Environment.GetEnvironmentVariable("DB_HOST");
+            var name = Environment.GetEnvironmentVariable("DB_NAME");
+            var username = Environment.GetEnvironmentVariable("DB_USERNAME");
+            var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
+            var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "3306";
+            
+            if (string.IsNullOrEmpty(host) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                throw new InvalidOperationException("Database configuration environment variables are missing.");
+            }
+
+            mySqlConnString =  $"Server={host}; Port={port}; User ID={username}; Password={password}; Database={name};";
         }
+        else
+        {
+            mySqlConnString = Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb");
 
-        var mySqlConnString = $"Server={host}; Port={port}; User ID={username}; Password={password}; Database={name};";
-
+            if (string.IsNullOrEmpty(mySqlConnString))
+            {
+                throw new InvalidOperationException("MYSQLCONNSTR_localdb environment variable is missing.");
+            }
+        }
+        
         optionsBuilder.UseMySql(mySqlConnString, ServerVersion.AutoDetect(mySqlConnString));
     }
     
