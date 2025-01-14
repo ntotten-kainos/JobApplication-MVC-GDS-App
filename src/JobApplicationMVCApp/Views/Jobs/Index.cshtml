@@ -1,5 +1,4 @@
-@model IEnumerable<JobApplicationMVCApp.Models.JobPosting>
-
+@model PaginatedList<JobApplicationMVCApp.Models.JobPosting>
 @{
 ViewData["Title"] = "View Job Roles";
 Layout = "~/Views/Shared/_Layout.cshtml";
@@ -77,7 +76,6 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             <!-- Jobs Section -->
             <div class="jobs-section">
                 <div class="header-section" style="margin-bottom: 5px">
-                    <h4 class="jobs-count">@Model.Count() Jobs Available</h4>
                     <form method="get" action="@Url.Action("Index", "Jobs")" class="sort-by-form">
                         <input type="hidden" name="location" value="@ViewData["SelectedLocation"]" />
                         <input type="hidden" name="department" value="@ViewData["SelectedDepartment"]" />
@@ -137,7 +135,70 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                     <p>No job roles available.</p>
                     }
                 </main>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full">
+                        <nav class="govuk-pagination govuk-!-margin-auto govuk-!-text-align-center" aria-label="Pagination">
+                            <!-- Previous Page Link -->
+                            <div class="govuk-pagination__prev">
+                                @if (Model.HasPreviousPage)
+                                {
+                                <a class="govuk-link govuk-pagination__link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)" rel="prev">
+                                    <svg class="govuk-pagination__icon govuk-pagination__icon--prev" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
+                                        <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+                                    </svg>
+                                    <span class="govuk-pagination__link-title">
+                        Previous<span class="govuk-visually-hidden"> page</span>
+                    </span>
+                                </a>
+                                }
+                            </div>
+
+                            <!-- Page Number List -->
+                            <ul class="govuk-pagination__list govuk-!-display-inline-block">
+                                @if (Model.PageIndex > 1)
+                                {
+                                <li class="govuk-pagination__item">
+                                    <a class="govuk-link govuk-pagination__link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)" aria-label="Page @(Model.PageIndex - 1)">
+                                        @(Model.PageIndex - 1)
+                                    </a>
+                                </li>
+                                }
+
+                                <li class="govuk-pagination__item govuk-pagination__item--current">
+                                    <a class="govuk-link govuk-pagination__link" href="#" aria-label="Page @Model.PageIndex" aria-current="page">
+                                        @Model.PageIndex
+                                    </a>
+                                </li>
+
+                                @if (Model.PageIndex < Model.TotalPages)
+                                {
+                                <li class="govuk-pagination__item">
+                                    <a class="govuk-link govuk-pagination__link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)" aria-label="Page @(Model.PageIndex + 1)">
+                                        @(Model.PageIndex + 1)
+                                    </a>
+                                </li>
+                                }
+                            </ul>
+
+                            <!-- Next Page Link -->
+                            <div class="govuk-pagination__next">
+                                @if (Model.HasNextPage)
+                                {
+                                <a class="govuk-link govuk-pagination__link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)" rel="next">
+                    <span class="govuk-pagination__link-title">
+                        Next<span class="govuk-visually-hidden"> page</span>
+                    </span>
+                                    <svg class="govuk-pagination__icon govuk-pagination__icon--next" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
+                                        <path d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
+                                    </svg>
+                                </a>
+                                }
+                            </div>
+                        </nav>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+

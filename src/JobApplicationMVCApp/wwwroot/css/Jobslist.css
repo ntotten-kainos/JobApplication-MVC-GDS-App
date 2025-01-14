@@ -35,6 +35,7 @@
     padding: 1rem;
     padding-top: 0;
     margin-top: 0;
+    margin-bottom: 0;
     /* Adds spacing between job cards */
 }
 
@@ -46,13 +47,25 @@
     padding: 0; /* Removes any default padding */
 }
 
-.header-section .jobs-count {
+.header-section .jobs-count{
     margin: 0; /* Removes unnecessary margin */
     font-size: 1.5rem;
     font-weight: 600;
     color: #333; /* Darker text for better readability */
 }
 
+.pagination-count {
+    font-style: italic; /* Make the text italic in the second span */
+}
+
+.jobs-count{
+    font-weight: bold; /* Make the text bold in the first span */
+}
+
+.jobs-count, .pagination-count {
+    margin: 0;
+    padding: 0;
+}
 .sort-by-form {
     display: flex;
     align-items: center;

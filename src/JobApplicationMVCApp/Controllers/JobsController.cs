@@ -20,7 +20,7 @@ namespace JobApplicationMVCApp.Controllers
         }
 
             // GET: Jobs
-            public async Task<IActionResult> Index(string location, string department, string status, string type, string sort)
+            public async Task<IActionResult> Index(string location, string department, string status, string type, string sort, int? pageNumber)
             {
                 // Populate filter dropdowns
                 ViewData["Departments"] = await _context.Departments.Select(d => d.DepartmentName).ToListAsync();
@@ -86,9 +86,10 @@ namespace JobApplicationMVCApp.Controllers
                     "salary-desc" => jobs.OrderByDescending(j => j.Salary),
                     _ => jobs
                 };
-
-                // Return the filtered and sorted job list to the view
-                return View(await jobs.ToListAsync());
+                
+                var count = await jobs.CountAsync();
+                int pageSize = 4;
+                return View(await PaginatedList<JobPosting>.CreateAsync(jobs.AsNoTracking(), pageNumber ?? 1, pageSize));
             }
             
             [HttpGet]
@@ -234,7 +235,7 @@ namespace JobApplicationMVCApp.Controllers
             return View(jobPosting);
         }
 
-        public async Task<IActionResult> ManageJobs(string location, string department, string status, string type, string sort)
+        public async Task<IActionResult> ManageJobs(string location, string department, string status, string type, string sort, int? pageNumber)
         {
             // Populate filter dropdowns
             ViewData["Departments"] = await _context.Departments.Select(d => d.DepartmentName).ToListAsync();
@@ -296,9 +297,10 @@ namespace JobApplicationMVCApp.Controllers
                 }
                 ViewData["SelectedSort"] = sort;
             }
-
-            // Return the filtered and sorted job list to the view
-            return View(await jobs.ToListAsync());
+            
+            var count = await jobs.CountAsync();
+            int pageSize = 4;
+            return View(await PaginatedList<JobPosting>.CreateAsync(jobs.AsNoTracking(), pageNumber ?? 1, pageSize));
         }       
 
         public async Task<IActionResult> ViewJob(int? id)
