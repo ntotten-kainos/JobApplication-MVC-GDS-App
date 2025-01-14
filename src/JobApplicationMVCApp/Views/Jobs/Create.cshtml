@@ -6,7 +6,7 @@
 }
 
 <!-- Back Button -->
-<a href="@(Context.Request.Query["returnUrl"].ToString() ?? Url.Action("AdminHomepage", "Home"))" class="govuk-back-link">
+<a href="@(Context.Request.Query["returnUrl"].ToString() ?? Url.Action("AdminHomepage", "Admin"))" class="govuk-back-link">
     Back
 </a>
 
